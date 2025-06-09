@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import { generateToken } from "../utils/generationtoken.js";
+import cloudinary from "../lib/cloudinary.js";
 
 // for signup
 
@@ -79,8 +80,47 @@ export const login = async(req,res) => {
   }
   catch(error){
     console.log("login error",error.message);
-    res.status.json({message:"invalid email and password"})
+    res.status(500).json({message:"invalid email and password"})
   }
 
+
+}
+
+export const logout = async(req,res) => {
+  try{
+    res.cookie("jwt","",{
+    maxAge:0
+
+      
+    })
+    res.status(402).json({message:"logout sucessfully"});
+
+  }
+  catch(error){
+    res.status(500).json({message:"Logout failed"})
+    console.log("error:logging out",error.message);
+
+  }
+
+}
+// for cloudinary
+export const updatepp = async (req,res)=>{
+  const {profilePic} = req.body
+  try{
+
+    
+    if(!profilePic){
+      return res.status(400).json({message:"please upload your profile picture"})
+    }
+
+    const upload =  await cloudinary.uploader.upload(profilePic)
+    res.status(200).json({message:"upload successfully"})
+
+  }
+  catch(error){
+    console.log("profile picture upload failed!",error.message)
+    res.status(500).json({message:"internal server error"})
+
+  }
 
 }
