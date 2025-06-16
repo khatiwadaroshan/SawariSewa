@@ -1,9 +1,9 @@
 import Vehicle from "../models/vehicle.model.js";
 import cloudinary from "../lib/cloudinary.js";
 
-// Create vehicle
+// register vehicle
 
-export const createVehicle = async (req, res) => {
+export const registerVehicle = async (req, res) => {
   try {
     const {
       name,

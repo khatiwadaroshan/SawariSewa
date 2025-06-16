@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const vechileSchema = mongoose.Schema(
+const vehicleSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -43,3 +43,6 @@ const vechileSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+const Vehicle = mongoose.model("Vehicle",vehicleSchema)
+export default Vehicle;

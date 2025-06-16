@@ -1,24 +1,18 @@
 import express from "express";
-import {
-  createVehicle,
-  getAllVehicles,
-  getVehicleById,
-  updateVehicle,
-  deleteVehicle,
-} from "../controllers/vehicle.controller.js";
+import { deleteVehicle, getAllVehicles, getVehicleById, registerVehicle, updateVehicle } from "../controller/vehicles.controller.js";
 
-import { protectRoute } from "../middleware/auth.middleware.js";
+
 
 const router = express.Router();
 
 
-router.post("/", createVehicle); 
+router.post("/registerVehicle",registerVehicle ); 
 
 
-router.get("/", getAllVehicles);
+router.get("/getAllVehicles", getAllVehicles);
 
 
-router.get("/:id", getVehicleById);
+router.get("/:id",getVehicleById );
 
 router.put("/:id", updateVehicle);
 

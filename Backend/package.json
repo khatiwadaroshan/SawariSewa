@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js"
+    "dev": " node --watch src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +21,6 @@
     "mongoose": "^8.15.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10",
     "prettier": "^3.5.3"
   }
 }

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { connectDb } from "./db/dbConnect.js";
 import authRoutes from "./routes/auth.routes.js";
 import cookieparser from "cookie-parser";
+import vehicleRoutes from "./routes/vehicles.route.js"
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(express.json());
 // import cookie parser to read cookies from new request
 app.use(cookieparser());
 
+
+app.use("/api/vehicles/",vehicleRoutes)
 app.use("/api/auth/", authRoutes);
 app.listen(port, (req, res) => {
   console.log(`server listing on port ${port}`);
