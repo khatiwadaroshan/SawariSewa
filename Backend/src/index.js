@@ -1,8 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectDb } from "./db/dbConnect.js";
-import authRoutes from "./routes/auth.routes.js"
-import cookieparser from "cookie-parser"
+import authRoutes from "./routes/auth.routes.js";
+import cookieparser from "cookie-parser";
 
 dotenv.config();
 
@@ -14,9 +14,9 @@ const app = express();
 app.use(express.json());
 
 // import cookie parser to read cookies from new request
-app.use(cookieparser())
+app.use(cookieparser());
 
-app.use("/api/auth/",authRoutes)
+app.use("/api/auth/", authRoutes);
 app.listen(port, (req, res) => {
   console.log(`server listing on port ${port}`);
   connectDb();
