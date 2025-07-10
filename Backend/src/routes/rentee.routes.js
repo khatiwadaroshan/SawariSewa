@@ -1,6 +1,6 @@
 import express from "express";
-import upload from "../middleware/uploads.js";
 import { registerRentee } from "../controller/rentee.controller.js";
+import upload from "../middleware/uploads.js";
 
 const router = express.Router();
 
@@ -15,5 +15,7 @@ router.post(
   ]),
   registerRentee
 );
+
+// other routes...
 
 export default router;

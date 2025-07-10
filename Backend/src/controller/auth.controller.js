@@ -13,7 +13,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (password < 8) {
+    if (password.length < 8) {
       return res
         .status(400)
         .json({ message: "Password must be at least 8 characters long" });
@@ -40,9 +40,12 @@ export const signup = async (req, res) => {
     });
 
     await newUser.save();
+
     generateToken(newUser._id, res);
 
     res.status(201).json({
+      success:true,
+      message:"Account created Successfully",
       _id: newUser._id,
       fullname: newUser.fullname,
       email: newUser.email,
@@ -74,6 +77,8 @@ export const login = async (req, res) => {
 
     generateToken(user._id, res);
     res.status(200).json({
+      success:true,
+      message:"Login Successfully",
       _id: user._id,
       email: user.email,
       password: user.password,

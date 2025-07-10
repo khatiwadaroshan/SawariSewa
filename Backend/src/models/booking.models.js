@@ -1,69 +1,50 @@
 import mongoose from "mongoose";
 
-const bookingSchema = new mongoose.Schema({
-
-    customerId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required:true
+const bookingSchema = new mongoose.Schema(
+  {
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-
-    vehicleId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Vehcile",
-        required:true,
+    vehicleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vehicle",
+      required: true,
     },
-
-    startDate:{
-        type:Date,
-        required:true,
+    startDate: {
+      type: Date,
+      required: true,
     },
-    endDate:{
-        type:Date,
-        required:true,
+    endDate: {
+      type: Date,
+      required: true,
     },
-     status:{
-        type:String,
-        enum:["Pending, Accepted","Rejected","Cancelled","Completed"],
-        required:true,
-     },
-     totalAmount:{
-        type:Number,
-        required:true,
-     },
-     paymentId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"payment"
-     },
-
-     CitizenshipPhoto:{
-        type:String,
-        required:true,
-     },
-
-     licensePhoto:{
-        type:String,
-        required:true,
-     },
-     selfiewithCitizenship:{
-        type:String,
-        required:true,
-     },
-     contactNumber:{
-        type:Number,
-        required:true,
-     },
+    status: {
+      type: String,
+      enum: ["Pending", "Accepted", "Rejected", "Cancelled", "Completed"],
+      required: true,
     },
-    {
-
-
-    timestamps:true,
-    collection:"bookings",
-
-
-}
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    paymentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+    },
+    citizenshipPhoto: { type: String, required: true },
+    citizenshipFrontPhoto: { type: String, required: true },
+    citizenshipBackPhoto: { type: String, required: true },
+    licensePhoto: { type: String, required: true },
+    selfieWithCitizenship: { type: String, required: true },
+    contactNumber: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+    collection: "bookings",
+  }
 );
 
-const Booking  = new mongoose.model("Booking",bookingSchema);
-
+const Booking = mongoose.model("Booking", bookingSchema);
 export default Booking;

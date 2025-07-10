@@ -1,35 +1,104 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Login from "./pages/Login"
+import Register from "./pages/Register"
+
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
+import Home from "./components/components_lite/Home"
+import Layout from "./pages/Layout"
+
+import TermsofServices from "./pages/TermsofServices"
+import Contact from "./pages/Contact"
+import Stores from "./pages/Stores"
+import Individual from "./pages/individual"
+import PrivacyPolicy from "./pages/PrivacyPolicy"
+import ContactUs from "./pages/Contactus"
+import Aboutus from "./pages/Aboutus"
+import { Toaster } from "sonner"
+import { Header } from "./pages/Header"
+import Booking from "./pages/Booking"
+import RegisterRentee from "./pages/RegisterRentee"
+import RegisterVehicle from "./pages/RegisterVehcile"
+
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        index: false,
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "stores",
+        element: <Stores />,
+      },
+      {
+        path: "individual",
+        element: <Individual />,
+      },
+      {
+        path: "termsofservices",
+        element: <TermsofServices />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
+      },
+      {
+        path: "privacypolicy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "contactus",
+        element: <ContactUs />,
+      },
+      {
+        path: "aboutus",
+        element: <Aboutus />,
+      },
+      {
+        path: "home",
+        element: <Home />,
+      },
+      {
+        path:"header",
+        element:<Header/>
+      },
+      {
+        path:"booking",
+        element:<Booking/>
+      },
+      {
+        path:"registerrentee",
+        element:< RegisterRentee/>
+      },
+      {
+        path:"register-vehicle",
+        element:<RegisterVehicle />
+      }
+
+    ],
+  },
+]);
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <RouterProvider router={appRouter}></RouterProvider>
+      <Toaster richColors position="top-right" />
+
     </>
-  )
+  );
 }
 
 export default App

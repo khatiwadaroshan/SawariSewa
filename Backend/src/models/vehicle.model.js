@@ -1,3 +1,5 @@
+// vehicle.model.js
+
 import mongoose from "mongoose";
 
 const vehicleSchema = mongoose.Schema(
@@ -10,18 +12,17 @@ const vehicleSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-   
     registrationNumber: {
       type: String,
       unique: true,
     },
-    
     image: {
       type: String,
       required: true,
     },
     renteeid: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Rentee",
       required: true,
     },
     type: {
@@ -31,7 +32,9 @@ const vehicleSchema = mongoose.Schema(
     },
     fueltype: {
       type: String,
-      required: true,
+      required: function () {
+        return this.type === "car";
+      },
     },
     status: {
       type: String,
@@ -44,5 +47,5 @@ const vehicleSchema = mongoose.Schema(
   }
 );
 
-const Vehicle = mongoose.model("Vehicle",vehicleSchema)
+const Vehicle = mongoose.model("Vehicle", vehicleSchema);
 export default Vehicle;

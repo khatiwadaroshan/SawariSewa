@@ -1,8 +1,9 @@
+// vehicle.controller.js
+
 import Vehicle from "../models/vehicle.model.js";
 import cloudinary from "../lib/cloudinary.js";
 
-// register vehicle
-
+// REGISTER A VEHICLE
 export const registerVehicle = async (req, res) => {
   try {
     const {
@@ -12,27 +13,35 @@ export const registerVehicle = async (req, res) => {
       type,
       fueltype,
       status,
-      image,
+      image, // This should be a Cloudinary base64 or image URL
       renteeid,
     } = req.body;
 
+    // Check if all required fields are provided
     if (
-      !name ||!price ||!registrationNumber ||!type ||!fueltype ||!image ||!renteeid
+      !name ||
+      !price ||
+      !registrationNumber ||
+      !type ||
+      !fueltype ||
+      !image ||
+      !renteeid
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check for existing registration number
+    // Check if a vehicle with same registration number exists
     const vehicleExists = await Vehicle.findOne({ registrationNumber });
     if (vehicleExists) {
       return res.status(400).json({ message: "Vehicle already registered" });
     }
 
-    // Upload image to cloudinary
+    // Upload image to Cloudinary
     const uploaded = await cloudinary.uploader.upload(image, {
       folder: "vehicles",
     });
 
+    // Create new vehicle document
     const newVehicle = new Vehicle({
       name,
       price,
@@ -52,22 +61,26 @@ export const registerVehicle = async (req, res) => {
   }
 };
 
-// Get all vehicles
-
+// GET ALL VEHICLES (with rentee details)
 export const getAllVehicles = async (req, res) => {
   try {
-    const vehicles = await Vehicle.find();
+    const vehicles = await Vehicle.find().populate(
+      "renteeid",
+      "name phone profilePhoto email"
+    );
     res.status(200).json(vehicles);
   } catch (error) {
     res.status(500).json({ message: "Failed to get vehicles" });
   }
 };
 
-// Get vehicle by ID
-
+// GET VEHICLE BY ID
 export const getVehicleById = async (req, res) => {
   try {
-    const vehicle = await Vehicle.findById(req.params.id);
+    const vehicle = await Vehicle.findById(req.params.id).populate(
+      "renteeid",
+      "name phone profilePhoto email"
+    );
     if (!vehicle) {
       return res.status(404).json({ message: "Vehicle not found" });
     }
@@ -77,8 +90,7 @@ export const getVehicleById = async (req, res) => {
   }
 };
 
-// Update vehicle
-
+// UPDATE VEHICLE
 export const updateVehicle = async (req, res) => {
   try {
     const {
@@ -97,7 +109,7 @@ export const updateVehicle = async (req, res) => {
       return res.status(404).json({ message: "Vehicle not found" });
     }
 
-    // If image is updated, upload new image to cloudinary
+    // Upload new image if changed
     let imageUrl = vehicle.image;
     if (image && image !== vehicle.image) {
       const upload = await cloudinary.uploader.upload(image, {
@@ -106,11 +118,11 @@ export const updateVehicle = async (req, res) => {
       imageUrl = upload.secure_url;
     }
 
+    // Update fields
     vehicle.name = name || vehicle.name;
     vehicle.price = price || vehicle.price;
     vehicle.registrationNumber =
       registrationNumber || vehicle.registrationNumber;
-
     vehicle.type = type || vehicle.type;
     vehicle.fueltype = fueltype || vehicle.fueltype;
     vehicle.status = status || vehicle.status;
@@ -124,7 +136,7 @@ export const updateVehicle = async (req, res) => {
   }
 };
 
-//  Delete  vehicles
+// DELETE VEHICLE
 export const deleteVehicle = async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id);

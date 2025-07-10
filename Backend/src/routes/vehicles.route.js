@@ -1,22 +1,29 @@
+// vehicle.routes.js
+
 import express from "express";
-import { deleteVehicle, getAllVehicles, getVehicleById, registerVehicle, updateVehicle } from "../controller/vehicles.controller.js";
-
-
+import {
+  registerVehicle,
+  getAllVehicles,
+  getVehicleById,
+  updateVehicle,
+  deleteVehicle,
+} from "../controller/vehicles.controller.js";
 
 const router = express.Router();
 
+// POST - register new vehicle
+router.post("/", registerVehicle);
 
-router.post("/registerVehicle",registerVehicle ); 
+// GET - all vehicles with rentee details
+router.get("/", getAllVehicles);
 
+// GET - single vehicle by ID with rentee details
+router.get("/:id", getVehicleById);
 
-router.get("/getAllVehicles", getAllVehicles);
-
-
-router.get("/:id",getVehicleById );
-
+// PUT - update vehicle
 router.put("/:id", updateVehicle);
 
-
+// DELETE - remove vehicle
 router.delete("/:id", deleteVehicle);
 
 export default router;

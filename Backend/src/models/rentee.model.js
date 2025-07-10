@@ -11,29 +11,39 @@ const renteeSchema = new mongoose.Schema(
       unique: true,
     },
 
-    phone: { type: String, required: true },
+    phone: { type: String,
+    required: true },
 
-    address: { type: String, required: true },
+    address: { type: String,
+    required: true },
 
-    profilePhoto: { type: String, required: true },
+    profilePhoto: { type: String, 
+    required: true },
 
-    password: { type: String, required: true },
+    password: { type: String,
+     required: true },
 
-    nidNumber: { type: String, required: true },
+    nidNumber: { type: String, // n:national
+    required: true },
 
-    nidImage: { type: String, required: true },
+    nidImage: { type: String, 
+    required: true },
 
-    vehicleRegistrationCard: { type: String, required: true },
+    vehicleRegistrationCard: { type: String,
+     required: true },
 
-    numberPlateImage: { type: String, required: true },
+    numberPlateImage: { type: String, 
+    required: true },
 
     licenseImage: { type: String },
 
-    isVerified: { type: Boolean, default: false },
+    isVerified: { type: Boolean, 
+    default: false },
 
     role: { type: String, default: "rentee" },
 
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date,
+     default: Date.now },
   },
   { collection: "rentees" }
 );
