@@ -19,7 +19,7 @@ app.use(cookieparser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5175",
     credentials: true,
   })
 );
@@ -34,7 +34,7 @@ app.use("/esewa", esewaRoutes);
 connectDb()
   .then(() => {
     app.listen(port, () => {
-      console.log(`✅ Server listening on port ${port}`);
+      console.log(` Server listening on port ${port}`);
     });
   })
   .catch((error) => {

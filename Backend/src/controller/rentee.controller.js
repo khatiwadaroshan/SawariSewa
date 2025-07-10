@@ -2,7 +2,7 @@ import Rentee from "../models/rentee.model.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
 
-// Upload buffer to Cloudinary helper
+// Upload helper
 const uploadToCloudinary = (fileBuffer, folder, filename) =>
   new Promise((resolve, reject) => {
     cloudinary.uploader
@@ -17,7 +17,6 @@ export const registerRentee = async (req, res) => {
   try {
     const { fullname, email, password, address, phone, nidnumber } = req.body;
 
-    // Check required files exist
     const requiredFiles = [
       "profilePhoto",
       "nidImage",
@@ -31,7 +30,6 @@ export const registerRentee = async (req, res) => {
       }
     }
 
-    // Upload images to Cloudinary
     const profilePhoto = await uploadToCloudinary(
       req.files.profilePhoto[0].buffer,
       "rentees",
@@ -56,7 +54,6 @@ export const registerRentee = async (req, res) => {
       `numberPlateImage_${Date.now()}`
     );
 
-    // Optional license image
     let licenseImage = "";
     if (req.files.licenseImage) {
       licenseImage = await uploadToCloudinary(
@@ -66,7 +63,6 @@ export const registerRentee = async (req, res) => {
       );
     }
 
-    // Check if email already exists
     const existingRentee = await Rentee.findOne({ email });
     if (existingRentee) {
       return res
@@ -74,10 +70,8 @@ export const registerRentee = async (req, res) => {
         .json({ message: "Rentee with this email already exists" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Save rentee
     const newRentee = new Rentee({
       name: fullname,
       email,
