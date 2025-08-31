@@ -26,6 +26,7 @@ const Register = () => {
       });
 
       if (res.data.success) {
+         localStorage.setItem("renteeId", res.data._id);
         toast.success(res.data.message);
         navigate("/login");
       }

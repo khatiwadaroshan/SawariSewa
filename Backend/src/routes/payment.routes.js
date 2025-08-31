@@ -4,13 +4,15 @@ import {
   getAllPayments,
   getPaymentById,
   refundPayment,
-} from "../controllers/paymentController.js";
+  verifyPayment,
+} from "../controller/payment.controller.js";
 
 const router = express.Router();
 
-router.post("/", createPayment);
-router.get("/", getAllPayments);
-router.get("/:id", getPaymentById);
-router.put("/refund/:id", refundPayment); // Refund route
+router.post("/", createPayment); // create/initiate payment
+router.get("/", getAllPayments); // list all
+router.get("/:id", getPaymentById); // get single
+router.put("/:id/refund", refundPayment); // refund
+router.get("/verify", verifyPayment); // eSewa verification
 
 export default router;

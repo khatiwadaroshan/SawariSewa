@@ -11,7 +11,8 @@ import { ChevronDown, LogOut, User2 } from 'lucide-react'
 
 const Navbar = () => {
 
-    const user = false;
+    const user =false;
+    
 
   return (
     
@@ -54,7 +55,7 @@ const Navbar = () => {
                         to="/individual"
                         className="block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
-                        Individual Owners
+                        Individual Owners Vehicle
                       </Link>
                     </li>
                   </ul>
@@ -125,3 +126,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+

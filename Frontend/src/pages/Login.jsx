@@ -31,11 +31,12 @@ const Login = () => {
         withCredentials: true,
       });
       if (res.data.success) {
+        // Store renteeId in localStorage for later use
+        localStorage.setItem("renteeId", res.data._id);
 
-        
-        
         toast.success(res.data.message);
         navigate("/home");
+        
       }
       
       

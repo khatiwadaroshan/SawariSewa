@@ -17,6 +17,10 @@ import { Header } from "./pages/Header"
 import Booking from "./pages/Booking"
 import RegisterRentee from "./pages/RegisterRentee"
 import RegisterVehicle from "./pages/RegisterVehcile"
+import PaymentFailed from "./pages/PaymentFailed"
+import PaymentForm from "./pages/PaymentForm"
+import PaymentSuccess from "./pages/PaymentSuccess"
+
 
 const appRouter = createBrowserRouter([
   {
@@ -68,22 +72,35 @@ const appRouter = createBrowserRouter([
         element: <Home />,
       },
       {
-        path:"header",
-        element:<Header/>
+        path: "header",
+        element: <Header />,
       },
       {
-        path:"booking",
-        element:<Booking/>
+        path: "booking",
+        element: <Booking />,
       },
       {
-        path:"registerrentee",
-        element:< RegisterRentee/>
+        path: "registerrentee",
+        element: <RegisterRentee />,
       },
       {
-        path:"register-vehicle",
-        element:<RegisterVehicle />
-      }
-
+        path: "registervehicle",
+        element: <RegisterVehicle />,
+      },
+      {
+        path: "paymentfailed",
+        element: <PaymentFailed />,
+      },
+      {
+        path: "paymentform",
+        element: <PaymentForm />,
+      },
+      {
+        path: "paymentsuccess",
+        element: <PaymentSuccess />,
+      },
+    
+    
     ],
   },
 ]);

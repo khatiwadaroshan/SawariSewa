@@ -1,7 +1,7 @@
 // vehicle.controller.js
-
 import Vehicle from "../models/vehicle.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import mongoose from "mongoose";
 
 // REGISTER A VEHICLE
 export const registerVehicle = async (req, res) => {
@@ -13,24 +13,28 @@ export const registerVehicle = async (req, res) => {
       type,
       fueltype,
       status,
-      image, // This should be a Cloudinary base64 or image URL
+      image,
       renteeid,
     } = req.body;
 
-    // Check if all required fields are provided
+    // Check required fields
     if (
       !name ||
       !price ||
       !registrationNumber ||
       !type ||
-      !fueltype ||
       !image ||
       !renteeid
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if a vehicle with same registration number exists
+    // Validate renteeid
+    if (!mongoose.Types.ObjectId.isValid(renteeid)) {
+      return res.status(400).json({ message: "Invalid rentee ID" });
+    }
+
+    // Check duplicate registration number
     const vehicleExists = await Vehicle.findOne({ registrationNumber });
     if (vehicleExists) {
       return res.status(400).json({ message: "Vehicle already registered" });
@@ -41,7 +45,7 @@ export const registerVehicle = async (req, res) => {
       folder: "vehicles",
     });
 
-    // Create new vehicle document
+    // Create vehicle
     const newVehicle = new Vehicle({
       name,
       price,
@@ -50,7 +54,7 @@ export const registerVehicle = async (req, res) => {
       fueltype,
       status: status || "available",
       image: uploaded.secure_url,
-      renteeid,
+      renteeid: new mongoose.Types.ObjectId(renteeid),
     });
 
     await newVehicle.save();
@@ -61,12 +65,12 @@ export const registerVehicle = async (req, res) => {
   }
 };
 
-// GET ALL VEHICLES (with rentee details)
+// GET ALL VEHICLES
 export const getAllVehicles = async (req, res) => {
   try {
     const vehicles = await Vehicle.find().populate(
       "renteeid",
-      "name phone profilePhoto email"
+      "name phone email"
     );
     res.status(200).json(vehicles);
   } catch (error) {
@@ -79,11 +83,9 @@ export const getVehicleById = async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id).populate(
       "renteeid",
-      "name phone profilePhoto email"
+      "name phone email"
     );
-    if (!vehicle) {
-      return res.status(404).json({ message: "Vehicle not found" });
-    }
+    if (!vehicle) return res.status(404).json({ message: "Vehicle not found" });
     res.status(200).json(vehicle);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch vehicle" });
@@ -105,9 +107,9 @@ export const updateVehicle = async (req, res) => {
     } = req.body;
 
     const vehicle = await Vehicle.findById(req.params.id);
-    if (!vehicle) {
-      return res.status(404).json({ message: "Vehicle not found" });
-    }
+    if (!vehicle) return res.status(404).json({ message: "Vehicle not found" });
+
+  
 
     // Upload new image if changed
     let imageUrl = vehicle.image;
@@ -127,11 +129,18 @@ export const updateVehicle = async (req, res) => {
     vehicle.fueltype = fueltype || vehicle.fueltype;
     vehicle.status = status || vehicle.status;
     vehicle.image = imageUrl;
-    vehicle.renteeid = renteeid || vehicle.renteeid;
+    if (renteeid) {
+      if (!mongoose.Types.ObjectId.isValid(renteeid)) {
+        return res.status(400).json({ message: "Invalid rentee ID" });
+      }
+      vehicle.renteeid = new mongoose.Types.ObjectId(renteeid);
+    }
+   
 
     const updatedVehicle = await vehicle.save();
     res.status(200).json(updatedVehicle);
   } catch (error) {
+    console.error("Update vehicle error:", error.message);
     res.status(500).json({ message: "Update failed" });
   }
 };
@@ -140,9 +149,7 @@ export const updateVehicle = async (req, res) => {
 export const deleteVehicle = async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id);
-    if (!vehicle) {
-      return res.status(404).json({ message: "Vehicle not found" });
-    }
+    if (!vehicle) return res.status(404).json({ message: "Vehicle not found" });
 
     await vehicle.remove();
     res.status(200).json({ message: "Vehicle deleted successfully" });

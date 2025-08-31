@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { instance } from "@/lib/axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dc751hryx/image/upload";
-const UPLOAD_PRESET = "my_upload_preset"; // your actual Cloudinary upload preset
+const UPLOAD_PRESET = "my_upload_preset";
 
 const RegisterVehicle = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -16,6 +21,7 @@ const RegisterVehicle = () => {
     type: "",
     fueltype: "",
     image: null,
+    _id: null,
   });
 
   const handleChange = (e) => {
@@ -27,6 +33,22 @@ const RegisterVehicle = () => {
     setForm((prev) => ({ ...prev, image: e.target.files[0] }));
   };
 
+  useEffect(() => {
+    if (location.state?.vehicle) {
+      const vehicle = location.state.vehicle;
+      setForm({
+        name: vehicle.name,
+        price: vehicle.price,
+        registrationNumber: vehicle.registrationNumber,
+        type: vehicle.type,
+        fueltype: vehicle.fueltype || "",
+        image: null,
+        _id: vehicle._id,
+      });
+      setEditing(true);
+    }
+  }, [location.state]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,26 +58,23 @@ const RegisterVehicle = () => {
       return;
     }
 
-    if (!form.image) {
-      toast.error("Please upload a vehicle image.");
-      return;
-    }
-
     try {
-      // Step 1: Upload image to Cloudinary
-      const imageData = new FormData();
-      imageData.append("file", form.image);
-      imageData.append("upload_preset", UPLOAD_PRESET);
+      let imageUrl = form.image;
 
-      const res = await fetch(CLOUDINARY_URL, {
-        method: "POST",
-        body: imageData,
-      });
+      if (form.image instanceof File) {
+        const imageData = new FormData();
+        imageData.append("file", form.image);
+        imageData.append("upload_preset", UPLOAD_PRESET);
 
-      const cloudinary = await res.json();
-      const imageUrl = cloudinary.secure_url;
+        const res = await fetch(CLOUDINARY_URL, {
+          method: "POST",
+          body: imageData,
+        });
 
-      // Step 2: Submit vehicle to backend
+        const cloudinaryRes = await res.json();
+        imageUrl = cloudinaryRes.secure_url;
+      }
+
       const vehicleData = {
         name: form.name,
         price: form.price,
@@ -66,24 +85,32 @@ const RegisterVehicle = () => {
         renteeid: renteeId,
       };
 
-      const response = await instance.post("/vehicles", vehicleData);
-
-      if (response.status === 201) {
-        toast.success("Vehicle registered successfully!");
-        setForm({
-          name: "",
-          price: "",
-          registrationNumber: "",
-          type: "",
-          fueltype: "",
-          image: null,
-        });
+      if (editing && form._id) {
+        const res = await instance.put(`/vehicles/${form._id}`, vehicleData);
+        toast.success("Vehicle updated successfully!");
+        navigate("/individual", { state: { newVehicle: res.data } });
       } else {
-        toast.error("Registration failed");
+        const res = await instance.post("/vehicles", vehicleData);
+        toast.success("Vehicle registered successfully!");
+        navigate("/individual", { state: { newVehicle: res.data } });
       }
+
+      setForm({
+        name: "",
+        price: "",
+        registrationNumber: "",
+        type: "",
+        fueltype: "",
+        image: null,
+        _id: null,
+      });
+
+      navigate("/individual");
+      
+  
     } catch (error) {
-      console.error("Error registering vehicle:", error);
-      toast.error("Something went wrong");
+      console.error(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -94,7 +121,7 @@ const RegisterVehicle = () => {
         className="w-full max-w-2xl space-y-6 bg-white p-8 rounded-3xl shadow-xl border"
       >
         <h2 className="text-3xl font-bold text-center text-purple-600">
-          Register Vehicle
+          {editing ? "Edit Vehicle" : "Register Vehicle"}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -171,7 +198,7 @@ const RegisterVehicle = () => {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              required
+              required={!editing}
             />
           </div>
         </div>
@@ -180,7 +207,7 @@ const RegisterVehicle = () => {
           type="submit"
           className="w-full bg-gradient-to-r from-purple-600 to-indigo-500 hover:scale-105 text-white text-lg py-4"
         >
-          Register Vehicle
+          {editing ? "Update Vehicle" : "Register Vehicle"}
         </Button>
       </form>
     </div>

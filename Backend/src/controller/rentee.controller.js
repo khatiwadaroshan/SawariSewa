@@ -1,5 +1,4 @@
 import Rentee from "../models/rentee.model.js";
-import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
 
 // Upload helper
@@ -15,10 +14,13 @@ const uploadToCloudinary = (fileBuffer, folder, filename) =>
 
 export const registerRentee = async (req, res) => {
   try {
-    const { fullname, email, password, address, phone, nidnumber } = req.body;
+    const {  address, phone, nidNumber } = req.body;
+
+    if(!address || !phone || !nidNumber) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const requiredFiles = [
-      "profilePhoto",
       "nidImage",
       "vehicleRegistrationCard",
       "numberPlateImage",
@@ -29,12 +31,6 @@ export const registerRentee = async (req, res) => {
         return res.status(400).json({ message: `Missing file: ${field}` });
       }
     }
-
-    const profilePhoto = await uploadToCloudinary(
-      req.files.profilePhoto[0].buffer,
-      "rentees",
-      `profilePhoto_${Date.now()}`
-    );
 
     const nidImage = await uploadToCloudinary(
       req.files.nidImage[0].buffer,
@@ -54,32 +50,21 @@ export const registerRentee = async (req, res) => {
       `numberPlateImage_${Date.now()}`
     );
 
-    let licenseImage = "";
-    if (req.files.licenseImage) {
-      licenseImage = await uploadToCloudinary(
-        req.files.licenseImage[0].buffer,
-        "rentees",
-        `licenseImage_${Date.now()}`
-      );
-    }
+    const licenseImage = req.files.licenseImage
+      ? await uploadToCloudinary(
+          req.files.licenseImage[0].buffer,
+          "rentees",
+          `licenseImage_${Date.now()}`
+        )
+      : "";
 
-    const existingRentee = await Rentee.findOne({ email });
-    if (existingRentee) {
-      return res
-        .status(400)
-        .json({ message: "Rentee with this email already exists" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newRentee = new Rentee({
-      name: fullname,
-      email,
+      
+      
       phone,
       address,
-      password: hashedPassword,
-      nidNumber: nidnumber,
-      profilePhoto,
+      nidNumber: nidNumber,
       nidImage,
       vehicleRegistrationCard,
       numberPlateImage,

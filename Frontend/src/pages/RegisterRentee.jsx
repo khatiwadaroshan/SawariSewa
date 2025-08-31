@@ -5,21 +5,19 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { instance } from "@/lib/axios";
 
-
 const RegisterRentee = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullname: "",
-    email: "",
-    password: "",
+    
+    
     address: "",
     phone: "",
-    nidnumber: "",
+    nidNumber: "",
   });
 
   const [files, setFiles] = useState({
-    profilePhoto: null,
+  
     nidImage: null,
     vehicleRegistrationCard: null,
     numberPlateImage: null,
@@ -41,109 +39,129 @@ const RegisterRentee = () => {
       const data = new FormData();
 
       // Append text fields
-      Object.entries(formData).forEach(([key, val]) => {
-        data.append(key, val);
-      });
+      Object.entries(formData).forEach(([key, val]) => data.append(key, val));
 
-      // Append file fields
+      // Append files if they exist
       Object.entries(files).forEach(([key, file]) => {
-        if (file) {
-          data.append(key, file);
-        }
+        if (file) data.append(key, file);
       });
 
-      const res = await instance.post("/rentee/register", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        
+      // Send request
+      const response = await instance.post("/rentee/register", data, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Rentee Registered!");
+      
+      localStorage.setItem("renteeId", response.data._id);
 
-      // Reset form after successful registration
+
+      toast.success("Rentee Registered Successfully!");
+
+      // Reset form
       setFormData({
-        fullname: "",
-        email: "",
-        password: "",
+        
+        
+        
         address: "",
         phone: "",
         nidnumber: "",
       });
       setFiles({
-        profilePhoto: null,
+        
         nidImage: null,
         vehicleRegistrationCard: null,
         numberPlateImage: null,
         licenseImage: null,
       });
 
-      navigate("/login"); // Redirect after registration
+      navigate("/registervehicle");
     } catch (err) {
       console.error(err);
-      toast.error(err?.response?.data?.message || "Failed to register rentee");
+      toast.error(err.response?.data?.message || err.message);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      encType="multipart/form-data"
-      className="p-6 bg-white shadow-xl rounded-xl space-y-6 max-w-md mx-auto"
-    >
-      <h1 className="text-xl font-bold text-center">Register Rentee</h1>
-
-      {/* Text Inputs */}
-      {["fullname", "email", "password", "address", "phone", "nidnumber"].map(
-        (field) => (
-          <div key={field}>
-            <Label htmlFor={field} className="capitalize">
-              {field}
-            </Label>
-            <Input
-              id={field}
-              type={field === "password" ? "password" : "text"}
-              name={field}
-              value={formData[field]}
-              required
-              onChange={handleChange}
-              className="mt-1"
-            />
-          </div>
-        )
-      )}
-
-      {/* File Inputs */}
-      {[
-        "profilePhoto",
-        "nidImage",
-        "vehicleRegistrationCard",
-        "numberPlateImage",
-        "licenseImage",
-      ].map((fileKey, index) => (
-        <div key={index}>
-          <Label htmlFor={fileKey} className="capitalize">
-            {fileKey.replace(/([A-Z])/g, " $1")}
-          </Label>
-          <Input
-            id={fileKey}
-            type="file"
-            accept="image/*"
-            name={fileKey}
-            onChange={handleFileChange}
-            required={fileKey !== "licenseImage"} // licenseImage optional
-            className="mt-1"
-          />
-        </div>
-      ))}
-
-      <button
-        type="submit"
-        className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition"
+    <div className="min-h-screen bg-gradient-to-tr from-white via-[#fef0ed] to-[#fde5df] flex items-center justify-center px-4 py-12">
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        className="w-full max-w-lg bg-white rounded-3xl shadow-xl p-8 space-y-8 border-4 border-[#f83002] relative overflow-hidden"
       >
-        Register Rentee
-      </button>
-    </form>
+        {/* Unique accent shape */}
+        <div className="absolute -top-16 -right-16 w-40 h-40 bg-[#f83002] opacity-10 rounded-full rotate-45 pointer-events-none"></div>
+
+        <h1 className="text-4xl font-extrabold text-[#f83002] text-center tracking-wide drop-shadow-md">
+          Register Rentee
+        </h1>
+
+        {/* Text Inputs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            
+          
+            "address",
+            "phone",
+            "nidNumber",
+          ].map((field) => (
+            <div key={field} className="flex flex-col">
+              <Label
+                htmlFor={field}
+                className="mb-2 text-sm font-semibold text-gray-800"
+              >
+                {field}
+              </Label>
+              <Input
+                id={field}
+                type="text"
+                name={field}
+                value={formData[field]}
+                required
+                onChange={handleChange}
+                placeholder={`Enter your ${field}`}
+                className="border-2 border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-[#f83002] focus:ring-2 focus:ring-[#f83002]/40 transition"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* File Inputs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+          
+            "nidImage",
+            "vehicleRegistrationCard",
+            "numberPlateImage",
+            "licenseImage",
+          ].map((fileKey, idx) => (
+            <div key={idx} className="flex flex-col">
+              <Label
+                htmlFor={fileKey}
+                className="mb-2 text-sm font-semibold text-gray-800 capitalize"
+              >
+                {fileKey.replace(/([A-Z])/g, " $1")}
+              </Label>
+              <Input
+                id={fileKey}
+                type="file"
+                accept="image/*"
+                name={fileKey}
+                onChange={handleFileChange}
+                required={fileKey !== "licenseImage"} // optional
+                className="border-2 border-gray-300 rounded-lg px-3 py-2 cursor-pointer focus:outline-none focus:border-[#f83002] focus:ring-2 focus:ring-[#f83002]/40 transition"
+              />
+            </div>
+          ))}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-[#f83002] to-[#cc2800] text-white font-extrabold text-lg py-3 rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform"
+        >
+          Register Rentee
+        </button>
+      </form>
+    </div>
   );
 };
 

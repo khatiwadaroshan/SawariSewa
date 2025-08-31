@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dc751hryx/image/upload";
-const UPLOAD_PRESET = "my_upload_preset"; // Replace with your Cloudinary preset
+const UPLOAD_PRESET = "my_upload_preset";
 
 const Booking = () => {
   const [formData, setFormData] = useState({

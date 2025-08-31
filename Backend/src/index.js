@@ -5,7 +5,10 @@ import authRoutes from "./routes/auth.routes.js";
 import vehicleRoutes from "./routes/vehicles.route.js";
 import renteeRoutes from "./routes/rentee.routes.js";
 import bookingRoutes from "./routes/booking.routes.js"; 
-import esewaRoutes from "./routes/esewa.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
+
+
+
 import cookieparser from "cookie-parser";
 import cors from "cors";
 
@@ -19,7 +22,7 @@ app.use(cookieparser());
 
 app.use(
   cors({
-    origin: "http://localhost:5175",
+     origin: [/^http:\/\/localhost:\d+$/],
     credentials: true,
   })
 );
@@ -29,7 +32,9 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/rentee", renteeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
-app.use("/esewa", esewaRoutes);
+app.use("/api/payments", paymentRoutes);
+
+
 
 connectDb()
   .then(() => {

@@ -3,6 +3,6 @@ import { createBooking } from "../controller/booking.controller.js";
 
 const router = express.Router();
 
-router.post("/", createBooking); // handles POST /api/bookings
+router.post("/", createBooking);
 
 export default router;
