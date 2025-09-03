@@ -52,11 +52,6 @@ const RegisterVehicle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const renteeId = localStorage.getItem("renteeId");
-    if (!renteeId) {
-      toast.error("Please log in as a rentee first.");
-      return;
-    }
 
     try {
       let imageUrl = form.image;
@@ -82,15 +77,14 @@ const RegisterVehicle = () => {
         type: form.type,
         fueltype: form.type === "car" ? form.fueltype : "",
         image: imageUrl,
-        renteeid: renteeId,
       };
 
       if (editing && form._id) {
-        const res = await instance.put(`/vehicles/${form._id}`, vehicleData);
+        const res = await instance.put(`/vehicles/update/${form._id}`, vehicleData);
         toast.success("Vehicle updated successfully!");
         navigate("/individual", { state: { newVehicle: res.data } });
       } else {
-        const res = await instance.post("/vehicles", vehicleData);
+        const res = await instance.post("/vehicles/register", vehicleData);
         toast.success("Vehicle registered successfully!");
         navigate("/individual", { state: { newVehicle: res.data } });
       }

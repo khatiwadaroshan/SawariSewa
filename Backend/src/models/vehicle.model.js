@@ -20,11 +20,6 @@ const vehicleSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    renteeid: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Rentee",
-      required: true,
-    },
     type: {
       type: String,
       enum: ["car", "bike", "etc"],

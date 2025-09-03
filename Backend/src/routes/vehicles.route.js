@@ -12,18 +12,18 @@ import {
 const router = express.Router();
 
 // POST - register new vehicle
-router.post("/", registerVehicle);
+router.post("/register", registerVehicle);
 
 // GET - all vehicles with rentee details
-router.get("/", getAllVehicles);
+router.get("/getV", getAllVehicles);
 
 // GET - single vehicle by ID with rentee details
 router.get("/:id", getVehicleById);
 
 // PUT - update vehicle
-router.put("/:id", updateVehicle);
+router.put("/update/:id", updateVehicle);
 
 // DELETE - remove vehicle
-router.delete("/:id", deleteVehicle);
+router.delete("/delete/:id", deleteVehicle);
 
 export default router;

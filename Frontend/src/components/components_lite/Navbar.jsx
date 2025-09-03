@@ -6,18 +6,23 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { ChevronDown, LogOut, User2 } from 'lucide-react'
+import { useAuthStore } from '@/Store/useAuthStore'
 
 
 
 const Navbar = () => {
 
-    const user =false;
+
+  const {authUser} = useAuthStore()
+  const user = authUser
+
+  
+
+
     
 
   return (
-    
-  <div className="bg-white sticky top-0 z-50 shadow-sm">
-
+    <div className="bg-white sticky top-0 z-50 shadow-sm">
       <div className="flex items-center mx-auto justify-between max-w-7xl h-16">
         <div>
           <h1 className="text-2xl font-bold">
@@ -26,7 +31,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-10">
           <ul className="flex items-center gap-6">
-            <Link to = "/Home">Home</Link>
+            <Link to="/Home">Home</Link>
 
             {/* Vehicles Dropdown */}
             <li>
@@ -107,12 +112,16 @@ const Navbar = () => {
                   <div className="flex flex-col my-2 text-gray-600 ">
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <User2></User2>
-                      <Button variant="link">Profile</Button>
+                      <Link to="/profile">
+                        <Button variant="link">Profile</Button>
+                      </Link>
                     </div>
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <LogOut></LogOut>
 
-                      <Button variant="link">Logout</Button>
+                      <Link to="/logout">
+                        <Button variant="link">Logout</Button>
+                      </Link>
                     </div>
                   </div>
                 </div>

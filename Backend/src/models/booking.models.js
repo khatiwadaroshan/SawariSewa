@@ -2,16 +2,16 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
-    customerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    vehicleId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Vehicle",
-      required: true,
-    },
+  //   customerId: {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "User",
+  //     required: true,
+  //   },
+  //   vehicleId: {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "Vehicle",
+  //     required: true,
+  //   },
     startDate: {
       type: Date,
       required: true,
@@ -20,19 +20,19 @@ const bookingSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["Pending", "Accepted", "Rejected", "Cancelled", "Completed"],
-      required: true,
-    },
-    totalAmount: {
-      type: Number,
-      required: true,
-    },
-    paymentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Payment",
-    },
+    // status: {
+    //   type: String,
+    //   enum: ["Pending", "Accepted", "Rejected", "Cancelled", "Completed"],
+    //   required: true,
+    // },
+    // totalAmount: {
+    //   type: Number,
+    //   required: true,
+    // },
+    // paymentId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Payment",
+    // },
     citizenshipPhoto: { type: String, required: true },
     citizenshipFrontPhoto: { type: String, required: true },
     citizenshipBackPhoto: { type: String, required: true },

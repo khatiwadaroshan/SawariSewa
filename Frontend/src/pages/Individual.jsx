@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { instance } from "@/lib/axios";
 
 const Individual = () => {
   const [vehicles, setVehicles] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const renteeId = localStorage.getItem("renteeId");
 
   // Fetch vehicles for logged-in rentee
   const fetchVehicles = async () => {
     try {
-      const res = await instance.get("/vehicles");
-      const renteeVehicles = res.data.filter(
-        (v) => v.renteeid._id.toString() === renteeId
-      );
-      setVehicles(renteeVehicles);
+      const res = await instance.get("/vehicles/getV");
+      setVehicles(res.data);
     } catch (error) {
       console.error(error);
       toast.error("Failed to fetch vehicles");
@@ -28,32 +19,6 @@ const Individual = () => {
   useEffect(() => {
     fetchVehicles();
   }, []);
-
-  // Add newly registered vehicle immediately
-  useEffect(() => {
-    if (location.state?.newVehicle) {
-      setVehicles((prev) => [location.state.newVehicle, ...prev]);
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state]);
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this vehicle?"))
-      return;
-
-    try {
-      await instance.delete(`/vehicles/${id}`);
-      toast.success("Vehicle deleted successfully");
-      setVehicles((prev) => prev.filter((v) => v._id !== id));
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete vehicle");
-    }
-  };
-
-  const handleEdit = (vehicle) => {
-    navigate("/registervehicle", { state: { vehicle } });
-  };
 
   return (
     <div className="bg-[#f1f5f9] py-16 px-4 sm:px-6 lg:px-12 min-h-screen">
@@ -99,21 +64,6 @@ const Individual = () => {
                     </span>
                   </p>
                 )}
-
-                <div className="flex justify-between gap-2">
-                  <Button
-                    className="bg-green-600 hover:bg-green-500 text-white w-1/2"
-                    onClick={() => handleEdit(vehicle)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="bg-red-600 hover:bg-red-500 text-white w-1/2"
-                    onClick={() => handleDelete(vehicle._id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
               </div>
             </div>
           ))}

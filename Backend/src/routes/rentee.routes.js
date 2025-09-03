@@ -1,6 +1,7 @@
 import express from "express";
 import { registerRentee } from "../controller/rentee.controller.js";
 import upload from "../middleware/uploads.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -12,8 +13,8 @@ router.post(
     { name: "vehicleRegistrationCard", maxCount: 1 },
     { name: "numberPlateImage", maxCount: 1 },
     { name: "licenseImage", maxCount: 1 }, // optional
-  ]),
-  registerRentee
+  ]),protectRoute
+  ,registerRentee
 );
 
 export default router;

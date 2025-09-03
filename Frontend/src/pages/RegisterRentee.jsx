@@ -14,6 +14,7 @@ const RegisterRentee = () => {
     address: "",
     phone: "",
     nidNumber: "",
+    
   });
 
   const [files, setFiles] = useState({
@@ -65,6 +66,7 @@ const RegisterRentee = () => {
         address: "",
         phone: "",
         nidnumber: "",
+        
       });
       setFiles({
         
@@ -103,6 +105,7 @@ const RegisterRentee = () => {
             "address",
             "phone",
             "nidNumber",
+            
           ].map((field) => (
             <div key={field} className="flex flex-col">
               <Label

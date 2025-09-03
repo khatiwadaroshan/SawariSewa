@@ -12,6 +12,8 @@ const renteeSchema = new mongoose.Schema(
     address: { type: String,
     required: true },
 
+    
+
     nidNumber: { type: String, // n:national
     required: true },
 

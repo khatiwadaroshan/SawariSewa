@@ -1,22 +1,31 @@
 import express from "express";
 import {
+  checkAuth,
   login,
   logout,
   signup,
   updatepp,
+  verifyEmail, // add this
 } from "../controller/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
-// creating new express for route
-
 const router = express.Router();
-// define route for signup
+
+// Signup
 router.post("/signup", signup);
-// define route for login
+
+// Email verification
+router.get("/verify-email", verifyEmail); // new route
+
+// Login
 router.post("/login", login);
-// define route fro logout
+
+// Logout
 router.post("/logout", logout);
-// define route for update picture
+
+// Update profile picture
 router.put("/updatepp", protectRoute, updatepp);
+
+router.get("/checkauth", protectRoute,checkAuth)
 
 export default router;

@@ -14,7 +14,7 @@ export const registerVehicle = async (req, res) => {
       fueltype,
       status,
       image,
-      renteeid,
+      
     } = req.body;
 
     // Check required fields
@@ -23,16 +23,13 @@ export const registerVehicle = async (req, res) => {
       !price ||
       !registrationNumber ||
       !type ||
-      !image ||
-      !renteeid
+      !image 
+      
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Validate renteeid
-    if (!mongoose.Types.ObjectId.isValid(renteeid)) {
-      return res.status(400).json({ message: "Invalid rentee ID" });
-    }
+    
 
     // Check duplicate registration number
     const vehicleExists = await Vehicle.findOne({ registrationNumber });
@@ -54,7 +51,7 @@ export const registerVehicle = async (req, res) => {
       fueltype,
       status: status || "available",
       image: uploaded.secure_url,
-      renteeid: new mongoose.Types.ObjectId(renteeid),
+     
     });
 
     await newVehicle.save();
@@ -68,10 +65,7 @@ export const registerVehicle = async (req, res) => {
 // GET ALL VEHICLES
 export const getAllVehicles = async (req, res) => {
   try {
-    const vehicles = await Vehicle.find().populate(
-      "renteeid",
-      "name phone email"
-    );
+    const vehicles = await Vehicle.find();
     res.status(200).json(vehicles);
   } catch (error) {
     res.status(500).json({ message: "Failed to get vehicles" });
@@ -82,7 +76,6 @@ export const getAllVehicles = async (req, res) => {
 export const getVehicleById = async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id).populate(
-      "renteeid",
       "name phone email"
     );
     if (!vehicle) return res.status(404).json({ message: "Vehicle not found" });
@@ -103,7 +96,6 @@ export const updateVehicle = async (req, res) => {
       fueltype,
       status,
       image,
-      renteeid,
     } = req.body;
 
     const vehicle = await Vehicle.findById(req.params.id);
@@ -129,12 +121,7 @@ export const updateVehicle = async (req, res) => {
     vehicle.fueltype = fueltype || vehicle.fueltype;
     vehicle.status = status || vehicle.status;
     vehicle.image = imageUrl;
-    if (renteeid) {
-      if (!mongoose.Types.ObjectId.isValid(renteeid)) {
-        return res.status(400).json({ message: "Invalid rentee ID" });
-      }
-      vehicle.renteeid = new mongoose.Types.ObjectId(renteeid);
-    }
+  
    
 
     const updatedVehicle = await vehicle.save();

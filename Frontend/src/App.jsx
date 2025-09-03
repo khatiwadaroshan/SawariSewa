@@ -17,9 +17,15 @@ import { Header } from "./pages/Header"
 import Booking from "./pages/Booking"
 import RegisterRentee from "./pages/RegisterRentee"
 import RegisterVehicle from "./pages/RegisterVehcile"
-import PaymentFailed from "./pages/PaymentFailed"
-import PaymentForm from "./pages/PaymentForm"
-import PaymentSuccess from "./pages/PaymentSuccess"
+
+import VerifyEmail from "./pages/VerifyEmail"
+import { ProtectedRoute, ToHomePage } from "./lib/ProtectedRoute"
+import { useAuthStore } from "./Store/useAuthStore"
+import { useEffect } from "react"
+import { IsRentee } from "./lib/renteeReg"
+import Profile from "./pages/Profile"
+import Logout from "./pages/Logout"
+import BookingConfirmation from "./pages/BookingConfirmation"
 
 
 const appRouter = createBrowserRouter([
@@ -28,12 +34,16 @@ const appRouter = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        index: false,
+        index: true,
         element: <Home />,
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <ToHomePage>
+            <Login />
+          </ToHomePage>
+        ),
       },
       {
         path: "register",
@@ -81,32 +91,49 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "registerrentee",
-        element: <RegisterRentee />,
+        element: (
+          <IsRentee>
+            <RegisterRentee />
+          </IsRentee>
+        ),
       },
       {
         path: "registervehicle",
         element: <RegisterVehicle />,
       },
+     
       {
-        path: "paymentfailed",
-        element: <PaymentFailed />,
+        path: "verify-email",
+        element: <VerifyEmail />,
       },
       {
-        path: "paymentform",
-        element: <PaymentForm />,
+        path: "profile",
+        element: <Profile />,
       },
       {
-        path: "paymentsuccess",
-        element: <PaymentSuccess />,
+        path: "logout",
+        element: <Logout />,
       },
-    
-    
+      {
+        path: "bookingconfirmation",
+        element: <BookingConfirmation />,
+      },
     ],
   },
 ]);
 
 
 function App() {
+
+  const {checkAuth,authUser} = useAuthStore()
+
+ useEffect(() => {
+   checkAuth();
+ }, []); // run once
+
+ useEffect(() => {
+   console.log(authUser); // runs every time authUser updates
+ }, [authUser]);
 
 
   return (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom"; // ✅ added
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dc751hryx/image/upload";
 const UPLOAD_PRESET = "my_upload_preset";
@@ -12,13 +13,14 @@ const Booking = () => {
     endDate: "",
     contactNumber: "",
     citizenshipPhoto: "",
-    citizenshipFront: "",
-    citizenshipBack: "",
+    citizenshipFrontPhoto: "",
+    citizenshipBackPhoto: "",
     licensePhoto: "",
     selfieWithCitizenship: "",
   });
 
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // ✅ added
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,21 +68,28 @@ const Booking = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/bookings", {
+      const response = await fetch("http://localhost:5001/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        credentials: "include", // needed if you use cookies/auth
       });
 
       if (response.ok) {
+        const data = await response.json(); // ✅ get response
+
         toast.success("Booking completed successfully!");
+
+        // ✅ Navigate to confirmation page with booking data
+        navigate("/bookingconfirmation", { state: { booking: data.booking } });
+
         setFormData({
           startDate: "",
           endDate: "",
           contactNumber: "",
           citizenshipPhoto: "",
-          citizenshipFront: "",
-          citizenshipBack: "",
+          citizenshipFrontPhoto: "",
+          citizenshipBackPhoto: "",
           licensePhoto: "",
           selfieWithCitizenship: "",
         });
@@ -110,8 +119,8 @@ const Booking = () => {
 
   const imageFields = [
     { name: "citizenshipPhoto", label: "Citizenship Photo" },
-    { name: "citizenshipFront", label: "Citizenship Front" },
-    { name: "citizenshipBack", label: "Citizenship Back" },
+    { name: "citizenshipFrontPhoto", label: "Citizenship Front" },
+    { name: "citizenshipBackPhoto", label: "Citizenship Back" },
     { name: "licensePhoto", label: "License Photo" },
     { name: "selfieWithCitizenship", label: "Selfie With Citizenship" },
   ];

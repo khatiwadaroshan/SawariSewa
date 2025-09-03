@@ -20,6 +20,10 @@ const userSchema = mongoose.Schema(
             type:String,
             default:""
         },
+        isRentee:{
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps:true
