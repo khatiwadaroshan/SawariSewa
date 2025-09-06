@@ -10,8 +10,17 @@ export const signup = async (req, res) => {
   try {
     const { fullname, password, email } = req.body;
 
-    if (!fullname || !email || !password ) {
+    if (!fullname || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // 🚫 Check fullname: only letters and spaces allowed
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameRegex.test(fullname)) {
+      return res.status(400).json({
+        message:
+          "Full name must only contain letters and spaces (no numbers or special characters).",
+      });
     }
 
     if (password.length < 8) {
@@ -28,8 +37,6 @@ export const signup = async (req, res) => {
     // hash password
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-   
 
     // create token
     const verificationToken = crypto.randomBytes(32).toString("hex");
@@ -64,6 +71,7 @@ export const signup = async (req, res) => {
       <a href="${verificationUrl}">Verify Email</a>
       `,
     });
+
     await newUser.save();
 
     res.status(201).json({
@@ -118,11 +126,9 @@ export const login = async (req, res) => {
 // LOGOUT
 export const logout = async (req, res) => {
   try {
-    res.cookie("jwt", "", {
+    res.cookie("JWT", "", {
       maxAge: 0,
       httpOnly: true,
-      
-      
     });
     res.status(200).json({ message: "Logout successfully" });
   } catch (error) {

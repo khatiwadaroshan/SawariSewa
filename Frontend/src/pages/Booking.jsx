@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom"; // ✅ added
+import { useNavigate } from "react-router-dom";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dc751hryx/image/upload";
 const UPLOAD_PRESET = "my_upload_preset";
@@ -12,7 +12,6 @@ const Booking = () => {
     startDate: "",
     endDate: "",
     contactNumber: "",
-    citizenshipPhoto: "",
     citizenshipFrontPhoto: "",
     citizenshipBackPhoto: "",
     licensePhoto: "",
@@ -20,11 +19,16 @@ const Booking = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // ✅ added
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      // If startDate changes, reset endDate to avoid invalid selection
+      if (name === "startDate")
+        return { ...prev, startDate: value, endDate: "" };
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleFileChange = async (e) => {
@@ -57,7 +61,40 @@ const Booking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields
+    // Validate contact number
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(formData.contactNumber)) {
+      toast.error("Contact number must be exactly 10 digits.");
+      return;
+    }
+
+    // Validate start and end dates
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const maxEndDate = new Date(start);
+    maxEndDate.setDate(start.getDate() + 10);
+
+    if (start < today) {
+      toast.error("Start date cannot be in the past.");
+      return;
+    }
+    if (!formData.endDate) {
+      toast.error("End date is required.");
+      return;
+    }
+    if (end < start) {
+      toast.error("End date cannot be before start date.");
+      return;
+    }
+    if (end > maxEndDate) {
+      toast.error("End date must be within 10 days from start date.");
+      return;
+    }
+
+    // Validate all other fields
     for (const key of Object.keys(formData)) {
       if (!formData[key]) {
         toast.error(`Please fill/upload the ${key}`);
@@ -72,22 +109,20 @@ const Booking = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-        credentials: "include", // needed if you use cookies/auth
+        credentials: "include",
       });
 
       if (response.ok) {
-        const data = await response.json(); // ✅ get response
-
+        const data = await response.json();
         toast.success("Booking completed successfully!");
 
-        // ✅ Navigate to confirmation page with booking data
+        // Navigate to confirmation page with booking data
         navigate("/bookingconfirmation", { state: { booking: data.booking } });
 
         setFormData({
           startDate: "",
           endDate: "",
           contactNumber: "",
-          citizenshipPhoto: "",
           citizenshipFrontPhoto: "",
           citizenshipBackPhoto: "",
           licensePhoto: "",
@@ -95,7 +130,6 @@ const Booking = () => {
         });
       } else {
         let errorMessage = "Unknown error occurred.";
-
         try {
           const text = await response.text();
           if (text) {
@@ -105,7 +139,6 @@ const Booking = () => {
         } catch (jsonErr) {
           errorMessage = `Error parsing server response: ${jsonErr.message}`;
         }
-
         toast.error(`Booking failed: ${errorMessage}`);
         console.error("Booking error details:", errorMessage);
       }
@@ -118,12 +151,23 @@ const Booking = () => {
   };
 
   const imageFields = [
-    { name: "citizenshipPhoto", label: "Citizenship Photo" },
     { name: "citizenshipFrontPhoto", label: "Citizenship Front" },
     { name: "citizenshipBackPhoto", label: "Citizenship Back" },
     { name: "licensePhoto", label: "License Photo" },
     { name: "selfieWithCitizenship", label: "Selfie With Citizenship" },
   ];
+
+  // Get today in YYYY-MM-DD format
+  const todayStr = new Date().toISOString().split("T")[0];
+
+  // Calculate max end date based on start date
+  const maxEndDateStr = formData.startDate
+    ? new Date(
+        new Date(formData.startDate).getTime() + 10 * 24 * 60 * 60 * 1000
+      )
+        .toISOString()
+        .split("T")[0]
+    : undefined;
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-indigo-50 via-purple-100 to-pink-50 flex items-center justify-center px-6 py-12">
@@ -149,6 +193,7 @@ const Booking = () => {
               value={formData.startDate}
               onChange={handleChange}
               required
+              min={todayStr}
               className="border-purple-300 focus:ring-purple-400 focus:border-purple-400"
             />
           </div>
@@ -166,6 +211,8 @@ const Booking = () => {
               value={formData.endDate}
               onChange={handleChange}
               required
+              min={formData.startDate || todayStr}
+              max={maxEndDateStr}
               className="border-purple-300 focus:ring-purple-400 focus:border-purple-400"
             />
           </div>
@@ -183,7 +230,7 @@ const Booking = () => {
               value={formData.contactNumber}
               onChange={handleChange}
               required
-              placeholder="+977 98XXXXXXXX"
+              placeholder="98XXXXXXXX"
               className="border-purple-300 focus:ring-purple-400 focus:border-purple-400"
             />
           </div>

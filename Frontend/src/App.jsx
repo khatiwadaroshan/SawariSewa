@@ -28,6 +28,14 @@ import Logout from "./pages/Logout"
 import BookingConfirmation from "./pages/BookingConfirmation"
 
 
+
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import Users from "./pages/admin/Users";
+import Vehicles from "./pages/admin/Vehicles";
+import Bookings from "./pages/admin/Bookings";
+import AdminLogin from "./pages/admin/AdminLogin";
+
+
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -101,7 +109,7 @@ const appRouter = createBrowserRouter([
         path: "registervehicle",
         element: <RegisterVehicle />,
       },
-     
+
       {
         path: "verify-email",
         element: <VerifyEmail />,
@@ -117,6 +125,22 @@ const appRouter = createBrowserRouter([
       {
         path: "bookingconfirmation",
         element: <BookingConfirmation />,
+      },
+
+      //  Admin routes start here
+      {
+        path: "/admin/login",
+        element: <AdminLogin />,
+      },
+      {
+        path: "/admin",
+        element: <AdminDashboard />,
+        children: [
+          { path: "users", element: <Users /> },
+          { path: "vehicles", element: <Vehicles /> },
+          { path: "bookings", element: <Bookings /> },
+        
+        ],
       },
     ],
   },

@@ -135,6 +135,8 @@ const Stores = () => {
   const [selectedStore, setSelectedStore] = useState(null);
   const navigate = useNavigate();
 
+  
+
   const user = {
     _id: "",
     name: "",
@@ -144,7 +146,6 @@ const Stores = () => {
     const vehicle = storeVehicles[store][vehicleIndex];
 
     if (!user || !user._id) {
-      
       navigate("/booking");
       return;
     }
@@ -152,7 +153,6 @@ const Stores = () => {
     // Navigate to booking page passing store name and vehicle index
     navigate("/booking", { state: { vehicle, user } });
   };
-  
 
   return (
     <section className="bg-gradient-to-b from-[#949391] to-[#ffece5] py-20 px-6 sm:px-10">

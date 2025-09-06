@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/Store/useAuthStore";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -40,10 +41,12 @@ const popularVehicles = [
 
 const PopularVehicles = () => {
   const navigate = useNavigate();
+  const {authUser}  = useAuthStore()
 
   const handleBookNow = (vehicle) => {
     // Navigate to booking page with selected vehicle info
-    navigate("/booking", { state: { vehicle } });
+ 
+   authUser? navigate("/booking", { state: { vehicle } }) : navigate("/login")
   };
 
   return (

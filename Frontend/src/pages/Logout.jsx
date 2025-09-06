@@ -2,24 +2,30 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/Store/useAuthStore";
 import { toast } from "sonner";
+import { instance } from "@/lib/axios";
+// import axios from "axios";
 
 const Logout = () => {
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    // Clear user from Zustand store
-    useAuthStore.setState({ authUser: null });
+    (async () => {
+      try {
+       const res =  await instance.post("/auth/logout");
 
-    
-    toast.success("Logged out successfully!");
+        // Clear Zustand store
+        useAuthStore.setState({ authUser: null });
 
-    
-    const timer = setTimeout(() => {
-      navigate("/login");
-    }, 1000);
+        toast.success(res.message);
 
-    return () => clearTimeout(timer);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      } catch (error) {
+        console.error("Logout failed:", error);
+        toast.error("Logout failed. Try again.");
+      }
+    })();
   }, [navigate]);
 
   return (

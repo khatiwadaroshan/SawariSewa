@@ -17,6 +17,13 @@ const Register = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    // 🚫 Validate fullname (only letters and spaces allowed)
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameRegex.test(input.fullname)) {
+      toast.error("Full name must only contain letters and spaces.");
+      return;
+    }
+
     try {
       const res = await instance.post("/auth/signup", input, {
         headers: {
@@ -26,7 +33,7 @@ const Register = () => {
       });
 
       if (res.data.success) {
-         localStorage.setItem("renteeId", res.data._id);
+        localStorage.setItem("renteeId", res.data._id);
         toast.success(res.data.message);
         navigate("/login");
       }

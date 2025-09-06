@@ -1,25 +1,26 @@
+import React from "react";
+import { Link, useNavigate } from "react-router-dom"; //Added useNavigate
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-
-import { Avatar, AvatarImage } from '../ui/avatar'
-import { Button } from '../ui/button'
-import { ChevronDown, LogOut, User2 } from 'lucide-react'
-import { useAuthStore } from '@/Store/useAuthStore'
-
-
+import { Avatar, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { ChevronDown, LogOut, User2 } from "lucide-react";
+import { useAuthStore } from "@/Store/useAuthStore";
 
 const Navbar = () => {
+  const { authUser } = useAuthStore();
+  const user = authUser;
+  const navigate = useNavigate(); // Added: to programmatically redirect
 
-
-  const {authUser} = useAuthStore()
-  const user = authUser
-
-  
-
-
-    
+  const handleProtectedLink = (path) => {
+    // Added: check login for protected links
+    if (!user) {
+      alert("You must be logged in to access this page"); //  Added alert
+      navigate("/login"); // Redirect to login
+      return;
+    }
+    navigate(path);
+  };
 
   return (
     <div className="bg-white sticky top-0 z-50 shadow-sm">
@@ -32,7 +33,6 @@ const Navbar = () => {
         <div className="flex items-center gap-10">
           <ul className="flex items-center gap-6">
             <Link to="/Home">Home</Link>
-
             {/* Vehicles Dropdown */}
             <li>
               <Popover>
@@ -48,27 +48,29 @@ const Navbar = () => {
                 >
                   <ul className="flex flex-col text-sm text-gray-800 font-medium">
                     <li>
-                      <Link
-                        to="/stores"
-                        className="block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
+                      <button
+                        onClick={() => handleProtectedLink("/stores")} //  Added: protect link
+                        className="w-full text-left block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
                         Vehicle Stores
-                      </Link>
+                      </button>
                     </li>
                     <li>
-                      <Link
-                        to="/individual"
-                        className="block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
+                      <button
+                        onClick={() => handleProtectedLink("/individual")} // Added: protect link
+                        className="w-full text-left block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
                         Individual Owners Vehicle
-                      </Link>
+                      </button>
                     </li>
                   </ul>
                 </PopoverContent>
               </Popover>
             </li>
-
-            <Link to="/registerrentee">Rent Your Vehicle</Link>
+            <button onClick={() => handleProtectedLink("/registerrentee")}>
+              Rent Your Vehicle
+            </button>{" "}
+            {/*  Protected like above */}
             <Link to={"/aboutus"} className="hover:text-[#00809D]">
               About Us
             </Link>
@@ -118,7 +120,6 @@ const Navbar = () => {
                     </div>
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <LogOut></LogOut>
-
                       <Link to="/logout">
                         <Button variant="link">Logout</Button>
                       </Link>
@@ -132,7 +133,6 @@ const Navbar = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Navbar
-
+export default Navbar;
