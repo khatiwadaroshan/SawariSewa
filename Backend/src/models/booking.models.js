@@ -34,6 +34,11 @@ const bookingSchema = new mongoose.Schema(
     //   ref: "Payment",
     // },
 
+    citizenshipNumber: {
+      type: String,
+      required: true,
+    },
+
     citizenshipFrontPhoto: { type: String, required: true },
     citizenshipBackPhoto: { type: String, required: true },
     licensePhoto: { type: String, required: true },

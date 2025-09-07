@@ -7,9 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { instance } from "@/lib/axios";
 import { toast } from "sonner";
 
-
 const Login = () => {
-
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -30,23 +28,30 @@ const Login = () => {
         },
         withCredentials: true,
       });
+
       if (res.data.success) {
-        // Store renteeId in localStorage for later use
+        // Save user info for voice greeting
         localStorage.setItem("renteeId", res.data._id);
+        localStorage.setItem("fullname", res.data.fullname); // save fullname
+
+        // Voice Welcome
+        const utterance = new SpeechSynthesisUtterance(
+          `Welcome ${res.data.fullname}`
+        );
+        utterance.pitch = 1.2;
+        utterance.rate = 1;
+        speechSynthesis.speak(utterance);
 
         toast.success(res.data.message);
         navigate("/home");
-        
       }
-      
-      
 
       console.log(res.data);
     } catch (error) {
       console.log(error);
       const errormessage = error.response
         ? error.response.data.message
-        : "email or password not matched!!";
+        : "Email or password not matched!!";
       toast.error(errormessage);
     }
   };

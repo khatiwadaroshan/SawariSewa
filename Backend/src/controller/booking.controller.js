@@ -5,6 +5,7 @@ export const createBooking = async (req, res) => {
     const {
       startDate,
       endDate,
+      citizenshipNumber,
       citizenshipFrontPhoto,
       citizenshipBackPhoto,
       licensePhoto,
@@ -12,14 +13,21 @@ export const createBooking = async (req, res) => {
       contactNumber,
     } = req.body;
 
-    // 🚫 Validate contact number
+    //  Validate contact number
     if (!/^\d{10}$/.test(contactNumber)) {
       return res
         .status(400)
         .json({ message: "Contact number must be exactly 10 digits." });
     }
 
-    // 🚫 Validate start date
+    // Validate citizenship number
+    if (!/^\d{11}$/.test(citizenshipNumber)) {
+      return res
+        .status(400)
+        .json({ message: "Citizenship number must be exactly 11 digits." });
+    }
+
+    //  Validate start date
     if (!startDate) {
       return res.status(400).json({ message: "Start date is required." });
     }
@@ -42,7 +50,7 @@ export const createBooking = async (req, res) => {
         .json({ message: "Start date must be within the next 10 days." });
     }
 
-    // 🚫 Validate end date
+    // Validate end date
     if (!endDate) {
       return res.status(400).json({ message: "End date is required." });
     }
@@ -58,16 +66,15 @@ export const createBooking = async (req, res) => {
     const maxEndDate = new Date(start);
     maxEndDate.setDate(start.getDate() + 10); // end date max 10 days after start
     if (end > maxEndDate) {
-      return res
-        .status(400)
-        .json({
-          message: "End date cannot be more than 10 days after start date.",
-        });
+      return res.status(400).json({
+        message: "End date cannot be more than 10 days after start date.",
+      });
     }
 
     const booking = await Booking.create({
       startDate,
       endDate,
+      citizenshipNumber,
       citizenshipFrontPhoto,
       citizenshipBackPhoto,
       licensePhoto,

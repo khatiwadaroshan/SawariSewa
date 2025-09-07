@@ -47,8 +47,8 @@ const RegisterRentee = () => {
       return;
     }
 
-    if (!/^\d{16}$/.test(formData.nidNumber)) {
-      toast.error("NID number must be exactly 16 digits");
+    if (!/^\d{11}$/.test(formData.nidNumber)) {
+      toast.error("NID number must be exactly 11 digits");
       return;
     }
 
