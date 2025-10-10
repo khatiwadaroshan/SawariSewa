@@ -57,7 +57,7 @@ const TermsOfService = () => {
           <li>
             Partial refund for cancellations made at least 24 hours in advance.
           </li>
-          <li>No refund for same-day cancellations.</li>
+          <li>No refund for same day cancellations.</li>
         </ul>
       </section>
 

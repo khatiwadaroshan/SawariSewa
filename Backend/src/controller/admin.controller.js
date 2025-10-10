@@ -1,4 +1,4 @@
-// src/controller/admin.controller.js
+
 import Admin from "../models/admin.model.js";
 import User from "../models/user.model.js";
 import Vehicle from "../models/vehicle.model.js";
@@ -6,9 +6,10 @@ import Booking from "../models/booking.models.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generationtoken.js";
 
-// =======================
+
+
 // Admin Login
-// =======================
+
 export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -37,9 +38,8 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-// =======================
 // Fetch All Users
-// =======================
+
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -49,9 +49,8 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// =======================
+
 // Fetch All Vehicles
-// =======================
 export const getAllVehicles = async (req, res) => {
   try {
     const vehicles = await Vehicle.find();
@@ -61,16 +60,21 @@ export const getAllVehicles = async (req, res) => {
   }
 };
 
-// =======================
+
 // Fetch All Bookings
-// =======================
+
 export const getAllBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find()
-      .populate("userId", "fullname email") // populate user info
-      .populate("vehicleId", "name price");
+    // Fetch bookings from DB
+    const bookings = await Booking.find(); // simple fetch
+
+    // Send response
     res.status(200).json({ bookings });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch bookings" });
+    console.error("Failed to fetch bookings:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch bookings", error: error.message });
   }
 };
+

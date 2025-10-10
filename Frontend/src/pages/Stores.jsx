@@ -10,6 +10,7 @@ const storeVehicles = {
       price: "Rs. 2,500/day",
       image:
         "https://laxmihyundai.com/assets/frontend/images/cars/i20/highlight/carousel/5.jpg",
+      type: "Car",
     },
     {
       name: "Kia Seltos",
@@ -17,6 +18,7 @@ const storeVehicles = {
       price: "Rs. 3,000/day",
       image:
         "https://www.toyota.com.np/content/dam/nepal/price-list/toyota-rush.jpg",
+      type: "Car",
     },
     {
       name: "Toyota Corolla",
@@ -24,29 +26,35 @@ const storeVehicles = {
       price: "Rs. 2,800/day",
       image:
         "https://suzuki.com.np/uploads/product/thumb/bd5ea4fb816428a1025729cda3fec51f.png",
+      type: "Car",
     },
     {
       name: "Tata Nexon",
       fuel: "Petrol",
       price: "Rs. 2,400/day",
       image: "/vehicles/nexon.jpg",
+      type: "Car",
     },
 
     {
       name: "Maruti Swift",
       image: "/vehicles/swift.jpg",
+      type: "Car",
     },
     {
       name: "Honda Amaze",
       image: "/vehicles/amaze.jpg",
+      type: "Car",
     },
     {
       name: "Nissan Magnite",
       image: "/vehicles/magnite.jpg",
+      type: "Car",
     },
     {
       name: "Volkswagen Polo",
       image: "/vehicles/polo.jpg",
+      type: "Car",
     },
   ],
   "SITA NARAYAN Car Rentals": [
@@ -55,24 +63,28 @@ const storeVehicles = {
       fuel: "Petrol",
       price: "Rs. 2,700/day",
       image: "/vehicles/city.jpg",
+      type: "Car",
     },
     {
       name: "Ford EcoSport",
       fuel: "Diesel",
       price: "Rs. 2,600/day",
       image: "/vehicles/ecosport.jpg",
+      type: "Car",
     },
     {
       name: "MG Hector",
       fuel: "Petrol",
       price: "Rs. 3,200/day",
       image: "/vehicles/hector.jpg",
+      type: "Car",
     },
     {
       name: "Renault Kwid",
       fuel: "Petrol",
       price: "Rs. 1,800/day",
       image: "/vehicles/kwid.jpg",
+      type: "Car",
     },
   ],
   "DANZER Bike Zone": [
@@ -81,24 +93,28 @@ const storeVehicles = {
       fuel: "Petrol",
       price: "Rs. 1,500/day",
       image: "/vehicles/fz.jpg",
+      type: "Bike",
     },
     {
       name: "Bajaj Pulsar",
       fuel: "Petrol",
       price: "Rs. 1,400/day",
       image: "/vehicles/pulsar.jpg",
+      type: "Bike",
     },
     {
       name: "TVS Apache",
       fuel: "Petrol",
       price: "Rs. 1,600/day",
       image: "/vehicles/apache.jpg",
+      type: "Bike",
     },
     {
       name: "Honda Shine",
       fuel: "Petrol",
       price: "Rs. 1,300/day",
       image: "/vehicles/shine.jpg",
+      type: "Bike",
     },
   ],
   " BIKASH Bike Pro": [
@@ -107,24 +123,28 @@ const storeVehicles = {
       fuel: "Petrol",
       price: "Rs. 2,000/day",
       image: "/vehicles/classic.jpg",
+      type: "Bike",
     },
     {
       name: "KTM Duke",
       fuel: "Petrol",
       price: "Rs. 2,500/day",
       image: "/vehicles/duke.jpg",
+      type: "Bike",
     },
     {
       name: "Hero Splendor",
       fuel: "Petrol",
       price: "Rs. 1,200/day",
       image: "/vehicles/splendor.jpg",
+      type: "Bike",
     },
     {
       name: "Yamaha MT-15",
       fuel: "Petrol",
       price: "Rs. 2,200/day",
       image: "/vehicles/mt15.jpg",
+      type: "Bike",
     },
   ],
 };
@@ -135,23 +155,19 @@ const Stores = () => {
   const [selectedStore, setSelectedStore] = useState(null);
   const navigate = useNavigate();
 
-  
-
-  const user = {
-    _id: "",
-    name: "",
-  };
+  // const user = {
+  //   _id: "",
+  //   name: "",
+  // };
 
   const handleBookNow = (store, vehicleIndex) => {
     const vehicle = storeVehicles[store][vehicleIndex];
 
-    if (!user || !user._id) {
-      navigate("/booking");
-      return;
-    }
+    // Save the selected vehicle to localStorage
+    localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
 
-    // Navigate to booking page passing store name and vehicle index
-    navigate("/booking", { state: { vehicle, user } });
+    // Navigate to the booking page
+    navigate("/booking");
   };
 
   return (
@@ -228,5 +244,6 @@ const Stores = () => {
     </section>
   );
 };
+export { storeVehicles };
 
 export default Stores;

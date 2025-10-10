@@ -41,12 +41,15 @@ const popularVehicles = [
 
 const PopularVehicles = () => {
   const navigate = useNavigate();
-  const {authUser}  = useAuthStore()
+  const { authUser } = useAuthStore();
 
   const handleBookNow = (vehicle) => {
-    // Navigate to booking page with selected vehicle info
- 
-   authUser? navigate("/booking", { state: { vehicle } }) : navigate("/login")
+    if (!authUser) return navigate("/login");
+
+    // Save selected vehicle to localStorage exactly as in Stores.jsx
+    localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
+
+    navigate("/booking");
   };
 
   return (
@@ -104,3 +107,5 @@ const PopularVehicles = () => {
 };
 
 export default PopularVehicles;
+
+export { popularVehicles };

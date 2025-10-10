@@ -15,8 +15,8 @@ const Navbar = () => {
   const handleProtectedLink = (path) => {
     // Added: check login for protected links
     if (!user) {
-      alert("You must be logged in to access this page"); //  Added alert
-      navigate("/login"); // Redirect to login
+      alert("You must be logged in to access this page"); 
+      navigate("/login"); 
       return;
     }
     navigate(path);
@@ -49,7 +49,7 @@ const Navbar = () => {
                   <ul className="flex flex-col text-sm text-gray-800 font-medium">
                     <li>
                       <button
-                        onClick={() => handleProtectedLink("/stores")} //  Added: protect link
+                        onClick={() => handleProtectedLink("/stores")} 
                         className="w-full text-left block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
                         Vehicle Stores
@@ -57,7 +57,7 @@ const Navbar = () => {
                     </li>
                     <li>
                       <button
-                        onClick={() => handleProtectedLink("/individual")} // Added: protect link
+                        onClick={() => handleProtectedLink("/individual")} 
                         className="w-full text-left block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
                         Individual Owners Vehicle
@@ -95,31 +95,37 @@ const Navbar = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage
+                    src={user?.profilePic || "https://via.placeholder.com/150"} // default image
+                  />
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                 <div className="flex items-center gap-4 space-y-2">
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarImage
+                      src={
+                        user?.profilePic || "https://via.placeholder.com/150"
+                      } // default image
+                    />
                   </Avatar>
                   <div>
-                    <h3 className="font-medium">User </h3>
+                    <h3 className="font-medium">{user?.fullname || "User"}</h3>
                     <p className="text-sm text-muted-foreground">
-                      Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                      {user?.email || "No email available"}
                     </p>
                   </div>
                 </div>
                 <div>
                   <div className="flex flex-col my-2 text-gray-600 ">
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <User2></User2>
+                      <User2 />
                       <Link to="/profile">
                         <Button variant="link">Profile</Button>
                       </Link>
                     </div>
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <LogOut></LogOut>
+                      <LogOut />
                       <Link to="/logout">
                         <Button variant="link">Logout</Button>
                       </Link>

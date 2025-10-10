@@ -10,9 +10,10 @@ const Vehicles = () => {
         const res = await axios.get("/api/admin/vehicles", {
           withCredentials: true,
         });
-        setVehicles(res.data);
+        setVehicles(res.data.Vehicles || []);
       } catch (err) {
         console.log(err);
+        setVehicles([]);
       }
     };
     fetchVehicles();

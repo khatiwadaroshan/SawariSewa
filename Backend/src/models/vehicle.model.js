@@ -1,4 +1,4 @@
-// vehicle.model.js
+
 
 import mongoose from "mongoose";
 

@@ -14,7 +14,7 @@ export const signup = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 🚫 Check fullname: only letters and spaces allowed
+    //  Check fullname: only letters and spaces allowed
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(fullname)) {
       return res.status(400).json({
@@ -129,6 +129,7 @@ export const logout = async (req, res) => {
     res.cookie("JWT", "", {
       maxAge: 0,
       httpOnly: true,
+
     });
     res.status(200).json({ message: "Logout successfully" });
   } catch (error) {
@@ -138,6 +139,7 @@ export const logout = async (req, res) => {
 };
 
 //  UPDATE PROFILE PICTURE
+
 export const updatepp = async (req, res) => {
   const { profilePic } = req.body;
   try {
@@ -147,12 +149,21 @@ export const updatepp = async (req, res) => {
         .json({ message: "Please upload your profile picture" });
     }
 
+    // Upload to Cloudinary
     const upload = await cloudinary.uploader.upload(profilePic);
+
+    // Update the user in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { profilePic: upload.secure_url },
+      { new: true }
+    );
+
     res
       .status(200)
-      .json({ message: "Upload successfully", url: upload.secure_url });
+      .json({ message: "Upload successfully", url: updatedUser.profilePic });
   } catch (error) {
-    console.log("profile picture upload failed:", error.message);
+    console.log("Profile picture upload failed:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -172,7 +183,7 @@ export const verifyEmail = async (req, res) => {
     await user.save();
 
     //redirect to frontend login page after verification
-    res.redirect(`${process.env.CLIENT_URL}login`);
+    res.redirect(`${process.env.CLIENT_URL}/login`);
   } catch (error) {
     console.error("verify email error:", error.message);
     res.status(500).send("Internal server error");

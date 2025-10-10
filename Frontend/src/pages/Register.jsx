@@ -7,43 +7,70 @@ import { instance } from "@/lib/axios";
 
 const Register = () => {
   const navigate = useNavigate();
-
+  const [profilePic, setProfilePic] = useState("");
+  // const [profileFile, setProfileFile] = useState(null);
   const [input, setInput] = useState({
     fullname: "",
     email: "",
     password: "",
   });
 
+  // Upload image to Cloudinary
+  const handleImageUpload = async (file) => {
+    if (!file) return;
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "my_upload_preset");
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dc751hryx/image/upload",
+        { method: "POST", body: data }
+      );
+      const json = await res.json();
+      setProfilePic(json.secure_url);
+      toast.success("Profile picture uploaded!");
+    } catch (err) {
+      console.error("Upload error:", err);
+      toast.error("Failed to upload image.");
+    }
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // 🚫 Validate fullname (only letters and spaces allowed)
+    // Validate fullname
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(input.fullname)) {
       toast.error("Full name must only contain letters and spaces.");
       return;
     }
 
+    // Make sure user uploaded profile picture
+    if (!profilePic) {
+      toast.error("Please upload your profile picture first!");
+      return;
+    }
+
     try {
-      const res = await instance.post("/auth/signup", input, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      const res = await instance.post(
+        "/auth/signup",
+        { ...input, profilePic },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
       if (res.data.success) {
-        localStorage.setItem("renteeId", res.data._id);
         toast.success(res.data.message);
         navigate("/login");
       }
 
-      console.log(res.data);
+      console.log("User created:", res.data);
     } catch (error) {
-      console.log(error);
-      const errormessage = error.response
-        ? error.response.data.message
-        : "An unexpected error occurred";
+      const errormessage =
+        error.response?.data.message || "An unexpected error occurred";
       toast.error(errormessage);
     }
   };
@@ -68,7 +95,6 @@ const Register = () => {
             </Label>
             <Input
               type="text"
-              name="fullname"
               placeholder="John Doe"
               value={input.fullname}
               onChange={(e) => setInput({ ...input, fullname: e.target.value })}
@@ -82,7 +108,6 @@ const Register = () => {
             </Label>
             <Input
               type="email"
-              name="email"
               placeholder="john@example.com"
               value={input.email}
               onChange={(e) => setInput({ ...input, email: e.target.value })}
@@ -99,7 +124,6 @@ const Register = () => {
             </Label>
             <Input
               type="password"
-              name="password"
               placeholder="********"
               value={input.password}
               onChange={(e) => setInput({ ...input, password: e.target.value })}
@@ -107,9 +131,32 @@ const Register = () => {
             />
           </div>
 
+          <div>
+            <Label
+              htmlFor="profilePic"
+              className="text-sm font-semibold text-black"
+            >
+              Profile Picture
+            </Label>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                // setProfileFile(e.target.files[0]); // save file
+                handleImageUpload(e.target.files[0]); // upload immediately
+              }}
+              className="mt-1 border-gray-300 focus:border-[#f83002] focus:ring-[#f83002]"
+            />
+          </div>
+
           <button
             type="submit"
-            className="w-full mt-4 py-3 rounded-md bg-[#f83002] text-white hover:bg-[#cc2800] transition duration-200"
+            disabled={!profilePic} // disable until profilePic exists
+            className={`w-full mt-4 py-3 rounded-md text-white transition duration-200 ${
+              !profilePic
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#f83002] hover:bg-[#cc2800]"
+            }`}
           >
             Register
           </button>

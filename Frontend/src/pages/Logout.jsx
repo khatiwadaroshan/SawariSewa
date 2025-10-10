@@ -16,7 +16,7 @@ const Logout = () => {
         // Clear Zustand store
         useAuthStore.setState({ authUser: null });
 
-        toast.success(res.message);
+        toast.success(res.data.message);
 
         setTimeout(() => {
           navigate("/login");

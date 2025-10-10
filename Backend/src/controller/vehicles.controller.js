@@ -1,4 +1,4 @@
-// vehicle.controller.js
+
 import Vehicle from "../models/vehicle.model.js";
 import cloudinary from "../lib/cloudinary.js";
 import mongoose from "mongoose";
@@ -115,8 +115,7 @@ export const updateVehicle = async (req, res) => {
     // Update fields
     vehicle.name = name || vehicle.name;
     vehicle.price = price || vehicle.price;
-    vehicle.registrationNumber =
-      registrationNumber || vehicle.registrationNumber;
+    vehicle.registrationNumber =registrationNumber || vehicle.registrationNumber;
     vehicle.type = type || vehicle.type;
     vehicle.fueltype = fueltype || vehicle.fueltype;
     vehicle.status = status || vehicle.status;

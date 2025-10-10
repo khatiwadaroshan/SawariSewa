@@ -34,6 +34,8 @@ import Users from "./pages/admin/Users";
 import Vehicles from "./pages/admin/Vehicles";
 import Bookings from "./pages/admin/Bookings";
 import AdminLogin from "./pages/admin/AdminLogin";
+import PaymentDemo from "./pages/PaymentDemo"
+import Payments from "./pages/admin/Payments"
 
 
 const appRouter = createBrowserRouter([
@@ -126,6 +128,11 @@ const appRouter = createBrowserRouter([
         path: "bookingconfirmation",
         element: <BookingConfirmation />,
       },
+      {
+        path:"payment",
+        element:<PaymentDemo/>,
+
+      },
 
       //  Admin routes start here
       {
@@ -139,6 +146,9 @@ const appRouter = createBrowserRouter([
           { path: "users", element: <Users /> },
           { path: "vehicles", element: <Vehicles /> },
           { path: "bookings", element: <Bookings /> },
+          {
+            path:"payments",element:<Payments/>
+          }
         
         ],
       },

@@ -10,9 +10,10 @@ const Users = () => {
         const res = await axios.get("/api/admin/users", {
           withCredentials: true,
         });
-        setUsers(res.data);
+        setUsers(res.data.Users || []);
       } catch (err) {
         console.log(err);
+        setUsers([]);
       }
     };
     fetchUsers();

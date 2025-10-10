@@ -10,7 +10,7 @@ const Footer = () => {
         backgroundColor: "#f1f1f1",
       }}
     >
-      <p>@ 2025 Job Portal. All rights reserved.</p>
+      <p>@ 2025 Sawari Sewa. All rights reserved.</p>
       <p>
         Powered by{" "}
         <a href="https://github.com/khatiwadaroshan">Roshan Khatiwada</a>
