@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { storeVehicles } from "./Stores"; // Import storeVehicles from Stores.jsx
 import { popularVehicles } from "./PopularVehicles"; // Import popularVehicles array
+import { useAuthStore } from "@/Store/useAuthStore";
 
 const VehicleSearch = () => {
   const navigate = useNavigate();
@@ -47,10 +48,26 @@ const VehicleSearch = () => {
     setResults([...filteredFromStores, ...filteredPopular]);
   }, [query]);
 
+  
+
+  const { authUser } = useAuthStore();
+
   const handleBookNow = (vehicle) => {
+    if (!authUser) {
+      alert("Please login first to book a vehicle.");
+      navigate("/login");
+      return;
+    }
+
     localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
     navigate("/booking");
   };
+
+
+  // const handleBookNow = (vehicle) => {
+  //   localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
+  //   navigate("/booking");
+  // };
 
   return (
     <section className="py-10 px-4 max-w-6xl mx-auto">

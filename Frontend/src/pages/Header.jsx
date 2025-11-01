@@ -6,6 +6,7 @@ import PopularVehicles from "./PopularVehicles";
 import Stores from "./Stores";
 import { storeVehicles } from "./Stores";
 import { popularVehicles } from "./PopularVehicles";
+import { useAuthStore } from "@/Store/useAuthStore";
 
 export const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,20 +39,37 @@ export const Header = () => {
     return nameMatch || typeMatch || priceMatch;
   });
 
-  const handleBookNow = (vehicle) => {
-    const user = JSON.parse(localStorage.getItem("user")); // get current user
+  // const handleBookNow = (vehicle) => {
+  //   const user = JSON.parse(localStorage.getItem("user")); // get current user
 
-    if (!user) {
-      // If not logged in, redirect to login page
+  //   if (!user) {
+  //     // If not logged in, redirect to login page
+  //     alert("Please login first to book a vehicle.");
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   // Save selected vehicle to localStorage (as before)
+  //   localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
+  //   navigate("/booking");
+  // };
+
+  
+
+  // inside Header component
+  const { authUser } = useAuthStore();
+
+  const handleBookNow = (vehicle) => {
+    if (!authUser) {
       alert("Please login first to book a vehicle.");
       navigate("/login");
       return;
     }
 
-    // Save selected vehicle to localStorage (as before)
     localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
     navigate("/booking");
   };
+
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#fefefe] via-[#fffaf4] to-[#ffece5] py-20 px-6 sm:px-10">

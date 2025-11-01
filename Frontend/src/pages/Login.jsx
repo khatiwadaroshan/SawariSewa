@@ -1,11 +1,14 @@
+
 import React, { useState } from "react";
 import Navbar from "../components/components_lite/Navbar";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { instance } from "@/lib/axios";
+
 import { toast } from "sonner";
+import { useAuthStore } from "@/Store/useAuthStore";
+
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -13,6 +16,7 @@ const Login = () => {
     password: "",
   });
 
+  const{login} = useAuthStore();
   const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
@@ -22,17 +26,21 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await instance.post("/auth/login", input, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      // const res = await instance.post("/auth/login", input, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   withCredentials: true,
+      // });
+      const res = await login(input)
 
       if (res.data.success) {
+
+        
         // Save user info for voice greeting
         localStorage.setItem("renteeId", res.data._id);
         localStorage.setItem("fullname", res.data.fullname); // save fullname
+         localStorage.setItem("profilePic", res.data.profilePic);
 
         // Voice Welcome
         const utterance = new SpeechSynthesisUtterance(

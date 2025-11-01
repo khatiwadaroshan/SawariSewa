@@ -4,6 +4,7 @@ import {
   getAllUsers,
   getAllVehicles,
   getAllBookings,
+  getAllPayments,
 } from "../controller/admin.controller.js";
 import { protectAdmin } from "../middleware/adminAuth.middleware.js";
 
@@ -16,5 +17,6 @@ router.post("/login", adminLogin);
 router.get("/users", protectAdmin, getAllUsers);
 router.get("/vehicles", protectAdmin, getAllVehicles);
 router.get("/bookings", protectAdmin, getAllBookings);
+router.get("/payments", protectAdmin, getAllPayments);
 
 export default router;

@@ -45,6 +45,7 @@ export const signup = async (req, res) => {
       fullname,
       email,
       password: hashedPassword,
+      profilePic: "",
       verificationToken,
       isVerified: false,
     });
@@ -79,7 +80,7 @@ export const signup = async (req, res) => {
       message: "Please click the link on your email to sign-in.",
     });
   } catch (error) {
-    console.error("signup error:", error.message);
+    console.error("signup error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

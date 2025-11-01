@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { instance } from "@/lib/axios";
+import { useAuthStore } from "@/Store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const Individual = () => {
   const [vehicles, setVehicles] = useState([]);
+  const { authUser } = useAuthStore();
+  const navigate = useNavigate();
 
   // Fetch vehicles for logged-in rentee
   const fetchVehicles = async () => {
@@ -19,6 +23,14 @@ const Individual = () => {
   useEffect(() => {
     fetchVehicles();
   }, []);
+
+  // Handle Book Now button click
+  const handleBookNow = (vehicle) => {
+    if (!authUser) return navigate("/login");
+
+    localStorage.setItem("selectedVehicle", JSON.stringify(vehicle));
+    navigate("/booking");
+  };
 
   return (
     <div className="bg-[#f1f5f9] py-16 px-4 sm:px-6 lg:px-12 min-h-screen">
@@ -45,7 +57,9 @@ const Individual = () => {
 
               <div className="p-5">
                 <div className="flex items-center justify-between text-sm text-gray-600 font-medium mb-1">
-                  <span className="text-[#1e293b]">{vehicle.type}</span>
+                  <span className="text-[#1e293b] capitalize">
+                    {vehicle.type}
+                  </span>
                   <span className="text-[#ff4f00] font-semibold">
                     Rs. {vehicle.price}/day
                   </span>
@@ -64,6 +78,14 @@ const Individual = () => {
                     </span>
                   </p>
                 )}
+
+                {/*  Book Now Button */}
+                <button
+                  onClick={() => handleBookNow(vehicle)}
+                  className="w-full bg-[#ff4f00] hover:bg-[#e03e00] text-white py-2 rounded-lg text-sm font-medium mt-2"
+                >
+                  Book Now
+                </button>
               </div>
             </div>
           ))}

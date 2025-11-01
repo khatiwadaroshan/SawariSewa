@@ -32,28 +32,33 @@ const storeVehicles = {
       name: "Tata Nexon",
       fuel: "Petrol",
       price: "Rs. 2,400/day",
-      image: "/vehicles/nexon.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRk-fUCoQSCQJyHw8TB302EAPEdCq4DQl-2Q8ogUGpNpaZBUlflVlq-GZgLwWleEEN2Is&usqp=CAU",
       type: "Car",
     },
 
     {
       name: "Maruti Swift",
-      image: "/vehicles/swift.jpg",
+      image:
+        "https://english.onlinekhabar.com/wp-content/uploads/2023/01/nexon-ev-img1.jpg",
       type: "Car",
     },
     {
       name: "Honda Amaze",
-      image: "/vehicles/amaze.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOR1hzbYyka-HIpuTugl12btnWrU7cff4ccQ&s",
       type: "Car",
     },
     {
       name: "Nissan Magnite",
-      image: "/vehicles/magnite.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2dl-jvxcxBeiRGHJjWBn1Y7rCO6w7enayA&s",
       type: "Car",
     },
     {
       name: "Volkswagen Polo",
-      image: "/vehicles/polo.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9HjEO4g5vBuYIjZu5qJXeXhx0Zfqhnz8FKg&s",
       type: "Car",
     },
   ],
@@ -62,28 +67,32 @@ const storeVehicles = {
       name: "Honda City",
       fuel: "Petrol",
       price: "Rs. 2,700/day",
-      image: "/vehicles/city.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYr1py-QaH2y9-BHYe5u3AzKdgjGfd-m2GJg&s",
       type: "Car",
     },
     {
       name: "Ford EcoSport",
       fuel: "Diesel",
       price: "Rs. 2,600/day",
-      image: "/vehicles/ecosport.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHyTQj6deoVGdbd6MhlM-EOJBzCh0Y9DtktA&s",
       type: "Car",
     },
     {
       name: "MG Hector",
       fuel: "Petrol",
       price: "Rs. 3,200/day",
-      image: "/vehicles/hector.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGQWvRuhOYSQKNAAbburnLiopAANPK7ZlX_g&s",
       type: "Car",
     },
     {
       name: "Renault Kwid",
       fuel: "Petrol",
       price: "Rs. 1,800/day",
-      image: "/vehicles/kwid.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSys1I1XhEzULQO1_e-yQ3jLUpaSNeRB-4SAw&s",
       type: "Car",
     },
   ],
@@ -92,28 +101,31 @@ const storeVehicles = {
       name: "Yamaha FZ",
       fuel: "Petrol",
       price: "Rs. 1,500/day",
-      image: "/vehicles/fz.jpg",
+      image:
+        "https://delen.s3.ap-southeast-1.amazonaws.com/Yamaha_FZS_FI_V3_carbike360_com_exterior_4_9f5a4b6c3c.png",
       type: "Bike",
     },
     {
       name: "Bajaj Pulsar",
       fuel: "Petrol",
       price: "Rs. 1,400/day",
-      image: "/vehicles/pulsar.jpg",
+      image:
+        "https://cdn.bajajauto.com/en-np/-/media/globalbajajauto/common-media/product-detail-page-banners/pulsar/ns-200-nepal",
       type: "Bike",
     },
     {
       name: "TVS Apache",
       fuel: "Petrol",
       price: "Rs. 1,600/day",
-      image: "/vehicles/apache.jpg",
+      image: "https://etimg.etb2bimg.com/photo/115450759.cms",
       type: "Bike",
     },
     {
       name: "Honda Shine",
       fuel: "Petrol",
       price: "Rs. 1,300/day",
-      image: "/vehicles/shine.jpg",
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjvG-0EzN-NVfVYol5Wu_VZnOUVjAPGYoj4A&s",
       type: "Bike",
     },
   ],
@@ -122,28 +134,32 @@ const storeVehicles = {
       name: "Royal Enfield Classic",
       fuel: "Petrol",
       price: "Rs. 2,000/day",
-      image: "/vehicles/classic.jpg",
+      image:
+        "https://www.royalenfield.com/content/dam/royal-enfield/motorcycles/new-classic-350/studio-shots/stealth-black/stealth-black-000.png",
       type: "Bike",
     },
     {
       name: "KTM Duke",
       fuel: "Petrol",
       price: "Rs. 2,500/day",
-      image: "/vehicles/duke.jpg",
+      image:
+        "https://www.ktmindia.com/-/media/images/ktm/ktm-bikes/orp/390-duke-orange.webp",
       type: "Bike",
     },
     {
       name: "Hero Splendor",
       fuel: "Petrol",
       price: "Rs. 1,200/day",
-      image: "/vehicles/splendor.jpg",
+      image:
+        "https://imgd.aeplcdn.com/1280x720/n/cw/ec/127607/splendor-plus-xtec-right-rear-three-quarter-17.jpeg?isig=0",
       type: "Bike",
     },
     {
       name: "Yamaha MT-15",
       fuel: "Petrol",
       price: "Rs. 2,200/day",
-      image: "/vehicles/mt15.jpg",
+      image:
+        "https://admin.sawaribd.com/storage/media/9pYelpKf4bferAZh7MeQOh6flbxzscL8IH0c25QC.jpg",
       type: "Bike",
     },
   ],

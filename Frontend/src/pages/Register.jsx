@@ -143,7 +143,7 @@ const Register = () => {
               accept="image/*"
               onChange={(e) => {
                 // setProfileFile(e.target.files[0]); // save file
-                handleImageUpload(e.target.files[0]); // upload immediately
+                handleImageUpload(e.target.files[0]); 
               }}
               className="mt-1 border-gray-300 focus:border-[#f83002] focus:ring-[#f83002]"
             />

@@ -8,7 +8,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
 
-  // Refresh authUser from localStorage in case of page reload
+  
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("authUser"));
     if (storedUser) setAuthUser(storedUser);

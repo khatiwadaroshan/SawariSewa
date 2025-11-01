@@ -93,3 +93,21 @@ export const createBooking = async (req, res) => {
       .json({ message: "Booking initiation failed", error: error.message });
   }
 };
+
+
+// Fetch logged-in user's bookings
+export const getMyBookings = async (req, res) => {
+  try {
+    const userId = req.user._id; // comes from auth middleware
+
+    const bookings = await Booking.find({ userId }); // adjust field if different
+    if (!bookings || bookings.length === 0) {
+      return res.status(200).json({ bookings: [] });
+    }
+
+    return res.status(200).json({ bookings });
+  } catch (error) {
+    console.error("getMyBookings error:", error);
+    return res.status(500).json({ message: "Failed to fetch bookings" });
+  }
+};

@@ -5,7 +5,9 @@ import authRoutes from "./routes/auth.routes.js";
 import vehicleRoutes from "./routes/vehicles.route.js";
 import renteeRoutes from "./routes/rentee.routes.js";
 import bookingRoutes from "./routes/booking.routes.js"; 
-import paymentRoutes from "./routes/payment.routes.js";
+
+
+
 import adminRoutes from "./routes/admin.routes.js";
 
 
@@ -34,7 +36,7 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/rentee", renteeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
-app.use("/api/admin/payments", paymentRoutes);
+
 
 app.use("/api/admin", adminRoutes);
 

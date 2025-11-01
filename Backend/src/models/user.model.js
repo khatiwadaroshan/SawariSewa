@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema(
         },
         profilePic:{
             type:String,
-            default:""
+            default:" "
         },
         isRentee:{
             type: Boolean,

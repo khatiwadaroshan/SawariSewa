@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
+import { instance } from "@/lib/axios";
 
 const Vehicles = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -7,7 +8,7 @@ const Vehicles = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const res = await axios.get("/api/admin/vehicles", {
+      const res = await instance.get("/admin/vehicles", {
           withCredentials: true,
         });
         setVehicles(res.data.Vehicles || []);

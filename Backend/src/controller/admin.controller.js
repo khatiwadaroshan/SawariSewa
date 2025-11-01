@@ -1,12 +1,10 @@
-
 import Admin from "../models/admin.model.js";
 import User from "../models/user.model.js";
 import Vehicle from "../models/vehicle.model.js";
 import Booking from "../models/booking.models.js";
+
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generationtoken.js";
-
-
 
 // Admin Login
 
@@ -49,7 +47,6 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-
 // Fetch All Vehicles
 export const getAllVehicles = async (req, res) => {
   try {
@@ -59,7 +56,6 @@ export const getAllVehicles = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch vehicles" });
   }
 };
-
 
 // Fetch All Bookings
 
@@ -78,3 +74,18 @@ export const getAllBookings = async (req, res) => {
   }
 };
 
+export const getAllPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find()
+      .populate("userId", "fullname email")
+      .populate("vehicleId", "name type price")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ payments });
+  } catch (error) {
+    console.error("Failed to fetch payments:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch payments", error: error.message });
+  }
+};

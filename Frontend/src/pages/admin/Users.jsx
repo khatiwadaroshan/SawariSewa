@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+
+import { instance } from "@/lib/axios";
 
 const Users = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setusers] = useState([]);
+
+
+  const getUsers = async () => {
+    try {
+      const res = await instance.get("/admin/users");
+      console.log("All users:", res.data);
+      setusers(res.data);
+    } catch (err) {
+      console.error(
+        "Failed to fetch users:",
+        err.response?.data || err.message
+      );
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get("/api/admin/users", {
-          withCredentials: true,
-        });
-        setUsers(res.data.Users || []);
-      } catch (err) {
-        console.log(err);
-        setUsers([]);
-      }
-    };
-    fetchUsers();
+    getUsers();
   }, []);
+
 
   return (
     <div>

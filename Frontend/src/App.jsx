@@ -34,8 +34,9 @@ import Users from "./pages/admin/Users";
 import Vehicles from "./pages/admin/Vehicles";
 import Bookings from "./pages/admin/Bookings";
 import AdminLogin from "./pages/admin/AdminLogin";
-import PaymentDemo from "./pages/PaymentDemo"
 import Payments from "./pages/admin/Payments"
+import MyBookings from "./pages/MyBookings"
+
 
 
 const appRouter = createBrowserRouter([
@@ -128,10 +129,11 @@ const appRouter = createBrowserRouter([
         path: "bookingconfirmation",
         element: <BookingConfirmation />,
       },
+      
+      
       {
-        path:"payment",
-        element:<PaymentDemo/>,
-
+        path:"mybookings",
+         element:<MyBookings/>
       },
 
       //  Admin routes start here
@@ -163,7 +165,7 @@ function App() {
 
  useEffect(() => {
    checkAuth();
- }, []); // run once
+ }, [checkAuth]); // run once
 
  useEffect(() => {
    console.log(authUser); // runs every time authUser updates

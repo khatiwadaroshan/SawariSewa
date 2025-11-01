@@ -1,25 +1,57 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom"; //Added useNavigate
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { ChevronDown, LogOut, User2 } from "lucide-react";
 import { useAuthStore } from "@/Store/useAuthStore";
+import { instance } from "@/lib/axios";
+
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
   const user = authUser;
-  const navigate = useNavigate(); // Added: to programmatically redirect
+  const navigate = useNavigate();
+
+useEffect(()=> {console.log(user);
+},[user])
+
+  // State to control Popover open/close
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [hasBooking, setHasBooking] = useState(false);
+
+  // Check if user has bookings
+  useEffect(() => {
+    const fetchUserBookings = async () => {
+      if (user) {
+        try {
+          const res = await instance.get("/bookings/mybookings", {
+            withCredentials: true,
+          });
+          if (res.data.bookings?.length > 0) {
+            setHasBooking(true);
+          } else {
+            setHasBooking(false);
+          }
+        } catch (err) {
+          console.error("Error fetching user bookings:", err);
+        }
+      } else {
+        setHasBooking(false);
+      }
+    };
+
+    fetchUserBookings();
+  }, [user]);
 
   const handleProtectedLink = (path) => {
-    // Added: check login for protected links
     if (!user) {
-      alert("You must be logged in to access this page"); 
-      navigate("/login"); 
+      alert("You must be logged in to access this page");
+      navigate("/login");
       return;
     }
     navigate(path);
+    setPopoverOpen(false); // Close the dropdown after selecting
   };
 
   return (
@@ -33,15 +65,16 @@ const Navbar = () => {
         <div className="flex items-center gap-10">
           <ul className="flex items-center gap-6">
             <Link to="/Home">Home</Link>
-            {/* Vehicles Dropdown */}
+
             <li>
-              <Popover>
+              <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <div className="flex items-center gap-1 cursor-pointer hover:text-[#00809D] transition-colors">
                     Vehicles
                     <ChevronDown className="w-4 h-4 mt-1" />
                   </div>
                 </PopoverTrigger>
+
                 <PopoverContent
                   sideOffset={8}
                   className="w-48 p-2 rounded-lg shadow-xl border border-gray-200"
@@ -49,7 +82,7 @@ const Navbar = () => {
                   <ul className="flex flex-col text-sm text-gray-800 font-medium">
                     <li>
                       <button
-                        onClick={() => handleProtectedLink("/stores")} 
+                        onClick={() => handleProtectedLink("/stores")}
                         className="w-full text-left block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
                         Vehicle Stores
@@ -57,7 +90,7 @@ const Navbar = () => {
                     </li>
                     <li>
                       <button
-                        onClick={() => handleProtectedLink("/individual")} 
+                        onClick={() => handleProtectedLink("/individual")}
                         className="w-full text-left block px-4 py-2 rounded-md hover:bg-gray-100 transition-all"
                       >
                         Individual Owners Vehicle
@@ -67,10 +100,17 @@ const Navbar = () => {
                 </PopoverContent>
               </Popover>
             </li>
+
             <button onClick={() => handleProtectedLink("/registerrentee")}>
               Rent Your Vehicle
-            </button>{" "}
-            {/*  Protected like above */}
+            </button>
+
+            {user && hasBooking && (
+              <Link to="/mybookings" className="hover:text-[#00809D]">
+                My Bookings
+              </Link>
+            )}
+
             <Link to={"/aboutus"} className="hover:text-[#00809D]">
               About Us
             </Link>
@@ -84,7 +124,6 @@ const Navbar = () => {
               <Link to="/login">
                 <Button variant="outline">Login</Button>
               </Link>
-
               <Link to="/register">
                 <Button className="bg-red-400 hover:bg-red-700">
                   Register
@@ -96,7 +135,7 @@ const Navbar = () => {
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src={user?.profilePic || "https://via.placeholder.com/150"} // default image
+                    src={user?.profilePic || "/150"}
                   />
                 </Avatar>
               </PopoverTrigger>
@@ -104,9 +143,7 @@ const Navbar = () => {
                 <div className="flex items-center gap-4 space-y-2">
                   <Avatar>
                     <AvatarImage
-                      src={
-                        user?.profilePic || "https://via.placeholder.com/150"
-                      } // default image
+                      src={user?.profilePic || "/150"}
                     />
                   </Avatar>
                   <div>
@@ -117,7 +154,7 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="flex flex-col my-2 text-gray-600 ">
+                  <div className="flex flex-col my-2 text-gray-600">
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <User2 />
                       <Link to="/profile">

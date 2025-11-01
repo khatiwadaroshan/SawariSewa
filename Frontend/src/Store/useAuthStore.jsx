@@ -23,4 +23,20 @@ export const useAuthStore = create((set) => ({
       localStorage.removeItem("authUser");
     }
   },
+
+  login: async (input) => {
+    try {
+       const res = await instance.post("/auth/login", input, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            });
+      set({authUser: res.data})
+      return res
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 }));

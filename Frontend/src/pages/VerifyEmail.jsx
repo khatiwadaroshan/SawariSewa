@@ -1,41 +1,31 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
 
-const VerifyEmail = () => {
-  const location = useLocation();
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+const Verified = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Extract token from query string
-    const params = new URLSearchParams(location.search);
-    const token = params.get("token");
-
-    if (token) {
-      // Call backend verify endpoint
-      window.location.href = `http://localhost:5001/api/auth/verify-email?token=${token}`;
-    } else {
-      // If no token → redirect to login
+    const timer = setTimeout(() => {
       navigate("/login");
-    }
-  }, [location, navigate]);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center flex-col">
-      <h1 className="text-2xl font-bold text-green-600">
-        Verifying your email...
-      </h1>
-      <p className="mt-2 text-gray-600">
-        Please wait, you will be redirected shortly.
-      </p>
-      <p className="mt-4">
-        If you are not redirected,{" "}
-        <Link to="/login" className="text-blue-500 underline">
-          click here
-        </Link>
-        .
-      </p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
+      <div className="bg-white shadow-md p-6 rounded-2xl max-w-sm">
+        <h1 className="text-3xl font-bold text-green-600 mb-4">
+           Email Verified!
+        </h1>
+        <p className="text-gray-700 mb-4">
+          Your email has been successfully verified. <br />
+          You can now log in to your account.
+        </p>
+        
+      </div>
     </div>
   );
 };
 
-export default VerifyEmail;
+export default Verified;
