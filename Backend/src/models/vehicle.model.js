@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 
 const vehicleSchema = mongoose.Schema(
   {
+    
+
     name: {
       type: String,
       required: true,

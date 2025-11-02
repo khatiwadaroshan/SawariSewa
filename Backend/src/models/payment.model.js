@@ -7,11 +7,7 @@ const paymentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    vehicleId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Vehicle",
-      required: true,
-    },
+   
     bookingId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Booking",

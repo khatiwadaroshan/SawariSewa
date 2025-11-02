@@ -7,6 +7,8 @@ import { ChevronDown, LogOut, User2 } from "lucide-react";
 import { useAuthStore } from "@/Store/useAuthStore";
 import { instance } from "@/lib/axios";
 
+import userProfile from "../../assets/userprofile.jpg";
+
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
@@ -135,7 +137,7 @@ useEffect(()=> {console.log(user);
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
                   <AvatarImage
-                    src={user?.profilePic || "/150"}
+                    src={user?.profilePic || userProfile}
                   />
                 </Avatar>
               </PopoverTrigger>
@@ -143,7 +145,7 @@ useEffect(()=> {console.log(user);
                 <div className="flex items-center gap-4 space-y-2">
                   <Avatar>
                     <AvatarImage
-                      src={user?.profilePic || "/150"}
+                      src={user?.profilePic || userProfile}
                     />
                   </Avatar>
                   <div>

@@ -11,30 +11,41 @@ const formatDate = (date) =>
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const res = await instance.get("/booking/mybookings", {
+        const res = await instance.get("/bookings/mybookings", {
           withCredentials: true,
         });
-        setBookings(res.data.bookings || []);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
+        // Adjust this depending on your backend response
+        const data = res.data.data || res.data.bookings || [];
+        setBookings(data);
+        console.log("Bookings:", data);
+      } catch (err) {
+        console.error("Error fetching bookings:", err);
+        setError("Failed to fetch bookings. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
+
     fetchBookings();
   }, []);
 
-  if (loading) return <div className="text-gray-600 p-6">Loading...</div>;
+  if (loading)
+    return <div className="text-gray-600 p-6">Loading your bookings...</div>;
+
+  if (error)
+    return <div className="text-red-500 p-6 font-semibold">{error}</div>;
 
   return (
     <div className="p-6">
       <h2 className="text-3xl font-bold mb-6 text-purple-700">
         🧾 My Bookings
       </h2>
+
       {bookings.length === 0 ? (
         <p className="text-gray-500">You have no bookings yet.</p>
       ) : (
@@ -52,13 +63,30 @@ const MyBookings = () => {
               {bookings.map((b) => (
                 <tr key={b._id} className="hover:bg-purple-50">
                   <td className="border px-4 py-2">
-                    {b.vehicleId?.name || "-"}
+                    {b.vehicleId?.name ? (
+                      <a
+                        href={`/vehicles/${b.vehicleId._id}`}
+                        className="text-blue-500 hover:underline"
+                      >
+                        {b.vehicleId.name}
+                      </a>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                   <td className="border px-4 py-2">
                     {formatDate(b.startDate)}
                   </td>
                   <td className="border px-4 py-2">{formatDate(b.endDate)}</td>
-                  <td className="border px-4 py-2 capitalize">
+                  <td
+                    className={`border px-4 py-2 capitalize font-semibold ${
+                      b.status === "confirmed"
+                        ? "text-green-600"
+                        : b.status === "cancelled"
+                        ? "text-red-600"
+                        : "text-yellow-600"
+                    }`}
+                  >
                     {b.status || "Pending"}
                   </td>
                 </tr>

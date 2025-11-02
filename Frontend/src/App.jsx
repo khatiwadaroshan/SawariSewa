@@ -25,16 +25,19 @@ import { useEffect } from "react";
 import { IsRentee } from "./lib/renteeReg";
 import Profile from "./pages/Profile";
 import Logout from "./pages/Logout";
-import BookingConfirmation from "./pages/BookingConfirmation";
+
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Users from "./pages/admin/Users";
 import Vehicles from "./pages/admin/Vehicles";
-import Bookings from "./pages/admin/Bookings";
+
 import AdminLogin from "./pages/admin/AdminLogin";
 import Payments from "./pages/admin/Payments";
 import MyBookings from "./pages/MyBookings";
 import { ProtectedAdminRoute } from "./lib/adminprotectedroutes";
+import Payment from "./pages/Payment";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailure from "./pages/PaymentFailure";
 
 const appRouter = createBrowserRouter([
   {
@@ -129,9 +132,18 @@ const appRouter = createBrowserRouter([
         path: "logout",
         element: <Logout />,
       },
+      
       {
-        path: "bookingconfirmation",
-        element: <BookingConfirmation />,
+        path:"payment",
+        element:<Payment/>
+      },
+      {
+        path:"paymentsuccess",
+        element:<PaymentSuccess />
+      },
+      {
+        path:"paymentfailure",
+        element:<PaymentFailure/>
       },
       {
         path: "mybookings",
@@ -140,6 +152,7 @@ const appRouter = createBrowserRouter([
             <MyBookings />
           </ProtectedRoute>
         ),
+        
       },
     ],
   },
@@ -158,7 +171,7 @@ const appRouter = createBrowserRouter([
     children: [
       { path: "users", element: <Users /> },
       { path: "vehicles", element: <Vehicles /> },
-      { path: "bookings", element: <Bookings /> },
+      
       { path: "payments", element: <Payments /> },
     ],
   },

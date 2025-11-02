@@ -66,7 +66,7 @@ const storeVehicles = {
     {
       name: "Honda City",
       fuel: "Petrol",
-      price: "Rs. 2,700/day",
+      price: " 2,700/day",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYr1py-QaH2y9-BHYe5u3AzKdgjGfd-m2GJg&s",
       type: "Car",
@@ -74,7 +74,7 @@ const storeVehicles = {
     {
       name: "Ford EcoSport",
       fuel: "Diesel",
-      price: "Rs. 2,600/day",
+      price: " 2,600/day",
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHyTQj6deoVGdbd6MhlM-EOJBzCh0Y9DtktA&s",
       type: "Car",

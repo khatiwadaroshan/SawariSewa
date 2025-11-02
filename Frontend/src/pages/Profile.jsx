@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuthStore } from "@/Store/useAuthStore";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
+import userProfile from "../assets/userprofile.jpg";
 
 const Profile = () => {
   const { authUser, setAuthUser } = useAuthStore();
@@ -65,8 +66,8 @@ const Profile = () => {
           <img
             src={
               preview ||
-              authUser.profilePic ||
-              "https://via.placeholder.com/150"
+              authUser.profilePic || userProfile
+              
             }
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover"

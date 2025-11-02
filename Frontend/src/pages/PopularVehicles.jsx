@@ -8,7 +8,7 @@ const popularVehicles = [
     name: "Hyundai i20",
     image:
       "https://images.prismic.io/carwow/f70a0317-00e0-4f67-92f5-7181534a1051_hyundai-i20-2024-rhd-front34dynamic.jpg",
-    price: "Rs. 2,500/day",
+    price: 2500,
     fuel: "Petrol",
     type: "Car",
   },
@@ -17,7 +17,7 @@ const popularVehicles = [
     name: "Yamaha FZ",
     image:
       "https://i0.wp.com/motoworldnepal.com/wp-content/uploads/2022/06/panther-black.jpg",
-    price: "Rs. 1,500/day",
+    price: 1500,
     type: "Bike",
   },
   {
@@ -25,7 +25,7 @@ const popularVehicles = [
     name: "Suzuki Baleno",
     image:
       "https://carpricesnepal.com/assets/img/product/product-66827c05a29e2baleno.webp",
-    price: "Rs. 2,200/day",
+    price: 2200,
     fuel: "Diesel",
     type: "Car",
   },
@@ -34,7 +34,7 @@ const popularVehicles = [
     name: "Royal Enfield Classic",
     image:
       "https://www.royalenfield.com/content/dam/royal-enfield/motorcycles/new-classic-350/studio-shots/360/emerald/01.png",
-    price: "Rs. 2,000/day",
+    price: 2000,
     type: "Bike",
   },
 ];

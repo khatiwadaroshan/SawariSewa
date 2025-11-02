@@ -28,7 +28,7 @@ export const Header = () => {
 
     // Match by price (numeric)
     const priceNumber = vehicle.price
-      ? parseInt(vehicle.price.replace(/\D/g, "")) // remove "Rs." and "/day"
+      ? parseInt(vehicle.price) // remove "Rs." and "/day"
       : 0;
     const searchNumber = parseInt(term);
     const priceMatch =
