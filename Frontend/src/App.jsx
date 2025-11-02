@@ -1,43 +1,40 @@
-import Login from "./pages/Login"
-import Register from "./pages/Register"
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
-import Home from "./components/components_lite/Home"
-import Layout from "./pages/Layout"
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import Home from "./components/components_lite/Home";
+import Layout from "./pages/Layout";
 
-import TermsofServices from "./pages/TermsofServices"
-import Contact from "./pages/Contact"
-import Stores from "./pages/Stores"
-import Individual from "./pages/individual"
-import PrivacyPolicy from "./pages/PrivacyPolicy"
-import ContactUs from "./pages/Contactus"
-import Aboutus from "./pages/Aboutus"
-import { Toaster } from "sonner"
-import { Header } from "./pages/Header"
-import Booking from "./pages/Booking"
-import RegisterRentee from "./pages/RegisterRentee"
-import RegisterVehicle from "./pages/RegisterVehcile"
+import TermsofServices from "./pages/TermsofServices";
+import Contact from "./pages/Contact";
+import Stores from "./pages/Stores";
+import Individual from "./pages/individual";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ContactUs from "./pages/Contactus";
+import Aboutus from "./pages/Aboutus";
+import { Toaster } from "sonner";
+import { Header } from "./pages/Header";
+import Booking from "./pages/Booking";
+import RegisterRentee from "./pages/RegisterRentee";
+import RegisterVehicle from "./pages/RegisterVehcile";
 
-import VerifyEmail from "./pages/VerifyEmail"
-import { ProtectedRoute, ToHomePage } from "./lib/ProtectedRoute"
-import { useAuthStore } from "./Store/useAuthStore"
-import { useEffect } from "react"
-import { IsRentee } from "./lib/renteeReg"
-import Profile from "./pages/Profile"
-import Logout from "./pages/Logout"
-import BookingConfirmation from "./pages/BookingConfirmation"
-
-
+import VerifyEmail from "./pages/VerifyEmail";
+import { ProtectedRoute, ToHomePage } from "./lib/ProtectedRoute";
+import { useAuthStore } from "./Store/useAuthStore";
+import { useEffect } from "react";
+import { IsRentee } from "./lib/renteeReg";
+import Profile from "./pages/Profile";
+import Logout from "./pages/Logout";
+import BookingConfirmation from "./pages/BookingConfirmation";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Users from "./pages/admin/Users";
 import Vehicles from "./pages/admin/Vehicles";
 import Bookings from "./pages/admin/Bookings";
 import AdminLogin from "./pages/admin/AdminLogin";
-import Payments from "./pages/admin/Payments"
-import MyBookings from "./pages/MyBookings"
-
-
+import Payments from "./pages/admin/Payments";
+import MyBookings from "./pages/MyBookings";
+import { ProtectedAdminRoute } from "./lib/adminprotectedroutes";
 
 const appRouter = createBrowserRouter([
   {
@@ -98,7 +95,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "booking",
-        element: <Booking />,
+        element: (
+          <ProtectedRoute>
+            <Booking />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "registerrentee",
@@ -112,14 +113,17 @@ const appRouter = createBrowserRouter([
         path: "registervehicle",
         element: <RegisterVehicle />,
       },
-
       {
         path: "verify-email",
         element: <VerifyEmail />,
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "logout",
@@ -129,56 +133,54 @@ const appRouter = createBrowserRouter([
         path: "bookingconfirmation",
         element: <BookingConfirmation />,
       },
-      
-      
       {
-        path:"mybookings",
-         element:<MyBookings/>
+        path: "mybookings",
+        element: (
+          <ProtectedRoute>
+            <MyBookings />
+          </ProtectedRoute>
+        ),
       },
-
-      //  Admin routes start here
-      {
-        path: "/admin/login",
-        element: <AdminLogin />,
-      },
-      {
-        path: "/admin",
-        element: <AdminDashboard />,
-        children: [
-          { path: "users", element: <Users /> },
-          { path: "vehicles", element: <Vehicles /> },
-          { path: "bookings", element: <Bookings /> },
-          {
-            path:"payments",element:<Payments/>
-          }
-        
-        ],
-      },
+    ],
+  },
+  // Admin routes - separate from main layout
+  {
+    path: "/admin/login",
+    element: <AdminLogin />,
+  },
+  {
+    path: "/admin",
+    element: (
+      <ProtectedAdminRoute>
+        <AdminDashboard />
+      </ProtectedAdminRoute>
+    ),
+    children: [
+      { path: "users", element: <Users /> },
+      { path: "vehicles", element: <Vehicles /> },
+      { path: "bookings", element: <Bookings /> },
+      { path: "payments", element: <Payments /> },
     ],
   },
 ]);
 
-
 function App() {
+  const { checkAuth, authUser } = useAuthStore();
 
-  const {checkAuth,authUser} = useAuthStore()
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
- useEffect(() => {
-   checkAuth();
- }, [checkAuth]); // run once
-
- useEffect(() => {
-   console.log(authUser); // runs every time authUser updates
- }, [authUser]);
-
+  useEffect(() => {
+    console.log(authUser);
+  }, [authUser]);
 
   return (
     <>
       <RouterProvider router={appRouter}></RouterProvider>
       <Toaster richColors position="top-right" />
-
     </>
   );
 }
 
-export default App
+export default App;

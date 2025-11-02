@@ -3,6 +3,7 @@ import Booking from "../models/booking.models.js";
 export const createBooking = async (req, res) => {
   try {
     const {
+      vehicleId,
       startDate,
       endDate,
       citizenshipNumber,
@@ -13,7 +14,10 @@ export const createBooking = async (req, res) => {
       contactNumber,
     } = req.body;
 
-    //  Validate contact number
+    // Get userId from authenticated user
+    const userId = req.user._id;
+
+    // Validate contact number
     if (!/^\d{10}$/.test(contactNumber)) {
       return res
         .status(400)
@@ -27,17 +31,17 @@ export const createBooking = async (req, res) => {
         .json({ message: "Citizenship number must be exactly 11 digits." });
     }
 
-    //  Validate start date
+    // Validate start date
     if (!startDate) {
       return res.status(400).json({ message: "Start date is required." });
     }
 
     const start = new Date(startDate);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // reset time
+    today.setHours(0, 0, 0, 0);
 
     const maxStartDate = new Date();
-    maxStartDate.setDate(today.getDate() + 10); // today + 10 days
+    maxStartDate.setDate(today.getDate() + 10);
 
     if (start < today) {
       return res
@@ -64,7 +68,7 @@ export const createBooking = async (req, res) => {
     }
 
     const maxEndDate = new Date(start);
-    maxEndDate.setDate(start.getDate() + 10); // end date max 10 days after start
+    maxEndDate.setDate(start.getDate() + 10);
     if (end > maxEndDate) {
       return res.status(400).json({
         message: "End date cannot be more than 10 days after start date.",
@@ -72,6 +76,8 @@ export const createBooking = async (req, res) => {
     }
 
     const booking = await Booking.create({
+      userId,
+      vehicleId,
       startDate,
       endDate,
       citizenshipNumber,
@@ -80,6 +86,7 @@ export const createBooking = async (req, res) => {
       licensePhoto,
       selfieWithCitizenship,
       contactNumber,
+      status: "pending",
     });
 
     return res.status(201).json({
@@ -87,20 +94,22 @@ export const createBooking = async (req, res) => {
       booking,
     });
   } catch (error) {
-    console.error("Initiate booking error:", error);
+    console.error("Create booking error:", error);
     return res
       .status(500)
-      .json({ message: "Booking initiation failed", error: error.message });
+      .json({ message: "Booking creation failed", error: error.message });
   }
 };
-
 
 // Fetch logged-in user's bookings
 export const getMyBookings = async (req, res) => {
   try {
-    const userId = req.user._id; // comes from auth middleware
+    const userId = req.user._id;
 
-    const bookings = await Booking.find({ userId }); // adjust field if different
+    const bookings = await Booking.find({ userId })
+      .populate("vehicleId", "name type price image")
+      .sort({ createdAt: -1 });
+
     if (!bookings || bookings.length === 0) {
       return res.status(200).json({ bookings: [] });
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -11,6 +11,15 @@ const Booking = () => {
   const navigate = useNavigate();
   const vehicle = JSON.parse(localStorage.getItem("selectedVehicle"));
 
+  const [vPrice, setVPrice] = useState(0);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (vehicle?.price) setVPrice(vehicle.price);
+  }, [vehicle]);
+
   const [formData, setFormData] = useState({
     startDate: "",
     endDate: "",
@@ -22,7 +31,20 @@ const Booking = () => {
     selfieWithCitizenship: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  // ✅ Safe total price calculation
+  const calculateTotalPrice = () => {
+    if (!startDate || !endDate) return 0;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start) || isNaN(end)) return 0;
+
+    const diffInMs = end - start;
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+    return diffInDays > 0 ? diffInDays * vPrice : 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +85,6 @@ const Booking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(formData.contactNumber)) {
       toast.error("Contact number must be exactly 10 digits.");
@@ -102,12 +123,14 @@ const Booking = () => {
       }
     }
 
+    const totalPrice = calculateTotalPrice();
+
     setLoading(true);
     try {
       const response = await fetch("http://localhost:5001/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, totalPrice }),
         credentials: "include",
       });
 
@@ -162,8 +185,17 @@ const Booking = () => {
               <span className="text-[#ff4f00]">{vehicle.name}</span>
             </p>
             <p className="text-lg font-semibold">
-              Price: <span className="text-[#ff4f00]">{vehicle.price}</span>
+              Price per day:{" "}
+              <span className="text-[#ff4f00]">Rs. {vPrice}</span>
             </p>
+            {startDate && endDate && (
+              <p className="text-lg font-semibold mt-2">
+                Total Price:{" "}
+                <span className="text-green-600">
+                  Rs. {calculateTotalPrice()}
+                </span>
+              </p>
+            )}
           </div>
         )}
 
@@ -175,7 +207,10 @@ const Booking = () => {
               type="date"
               name="startDate"
               value={formData.startDate}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                setStartDate(e.target.value);
+              }}
               min={todayStr}
               required
             />
@@ -186,7 +221,10 @@ const Booking = () => {
               type="date"
               name="endDate"
               value={formData.endDate}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                setEndDate(e.target.value);
+              }}
               min={formData.startDate || todayStr}
               max={maxEndDateStr}
               required
@@ -240,7 +278,7 @@ const Booking = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 text-xl bg-purple-600 text-white rounded-xl"
+          className="w-full py-4 text-xl bg-purple-600 text-white rounded-xl hover:bg-purple-700"
         >
           {loading ? "Processing..." : "Confirm Booking"}
         </button>

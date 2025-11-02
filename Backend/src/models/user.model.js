@@ -23,8 +23,22 @@ const userSchema = mongoose.Schema(
         isRentee:{
             type: Boolean,
             default: false
+        },
+         verificationToken:{
+            type: String
+        },
+        isVerified:{
+            type: Boolean,
+            default: false
+        },
+        role: {
+            type: String,
+            enum: ['user', 'admin'],
+            default: 'user'
         }
     },
+ 
+
     {
         timestamps:true
         }

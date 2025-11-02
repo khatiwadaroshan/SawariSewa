@@ -14,9 +14,7 @@ const AdminDashboard = () => {
           <li className="mb-4">
             <Link to="vehicles">Vehicles</Link>
           </li>
-          <li className="mb-4">
-            <Link to="bookings">Bookings</Link>
-          </li>
+         
           <li className="mb-4">
             <Link to="payments">Payments</Link>
           </li>
